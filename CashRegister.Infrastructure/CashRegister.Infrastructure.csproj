@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
@@ -27,6 +26,10 @@
     </PackageReference>
     <PackageReference Include="Npgsql" Version="6.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CashRegister.Domain\CashRegister.Domain.csproj" />
   </ItemGroup>
 
 </Project>

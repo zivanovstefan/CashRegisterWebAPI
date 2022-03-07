@@ -33,4 +33,8 @@
     <Folder Include="Configurations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CashRegister.Infrastructure\CashRegister.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
