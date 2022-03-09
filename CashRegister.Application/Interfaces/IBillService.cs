@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Application.Interfaces
 {
-    public interface IProductService
+    public interface IBillService
     {
-        IEnumerable<ProductVM> GetAllProducts();
+        IEnumerable<BillVM> GetAllBills();
+        void Create(BillVM billVM);
+        void Update(BillVM billVM);
+        void Delete(int id);
+        BillVM GetBillByID(int id);
     }
 }
