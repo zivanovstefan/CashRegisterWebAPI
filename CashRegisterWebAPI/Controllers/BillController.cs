@@ -18,7 +18,7 @@ namespace CashRegister.API.Controllers
         {
             return _billService.GetAllBills();
         }
-        [HttpPost("Add new bill")]
+        [HttpPost("Add bill")]
         public IActionResult CreateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
@@ -27,7 +27,7 @@ namespace CashRegister.API.Controllers
             _billService.Create(billVM);
             return Ok(billVM);
         }
-        [HttpPatch("Update")]
+        [HttpPatch("Update bill")]
         public IActionResult UpdateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
@@ -35,7 +35,7 @@ namespace CashRegister.API.Controllers
             _billService.Update(billVM);
             return Ok(billVM);
         }
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete bill")]
         public IActionResult DeleteBill([FromRoute] int id)
         {
             _billService.Delete(id);

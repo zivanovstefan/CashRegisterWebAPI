@@ -1,8 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using CashRegister.Infrastructure.Context;
 using Microsoft.OpenApi.Models;
+using MediatR;
+using CashRegister.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+static void RegisterService(IServiceCollection services)
+{
+    DependencyContainer.RegisterServices(services);
+}
 
 // Add services to the container.
 
@@ -17,6 +23,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<CashRegisterDBContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("CashRegisterDBConnection")
     ));
+builder.Services.AddMediatR(typeof(Program));
+RegisterService(builder.Services);
 
 var app = builder.Build();
 

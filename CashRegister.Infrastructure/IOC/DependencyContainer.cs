@@ -27,6 +27,7 @@ namespace CashRegister.Infrastructure
             //Domain handlers
             services.AddScoped<IRequestHandler<CreateBillCommand, bool>, CreateBillCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateBillCommand, bool>, UpdateBillCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateProductCommand, bool>, CreateProductCommandHandler>();
             //Application layer
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IProductService, ProductService>();

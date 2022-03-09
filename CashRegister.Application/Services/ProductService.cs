@@ -8,15 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Application.ViewModels;
+using CashRegister.Domain.Core.Bus;
+using CashRegister.Domain.Commands;
 
 namespace CashRegister.Application.Services
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductService(IProductRepository productRepository)
+        private readonly IMediatorHandler _bus;
+        public ProductService(IProductRepository productRepository, IMediatorHandler bus)
         {
             _productRepository = productRepository;
+            _bus = bus;
+        }
+        public void Create(ProductVM productVM)
+        {
+            var createProductCommand = new CreateProductCommand(
+                productVM.Id,
+                productVM.Name,
+                productVM.Price,
+                productVM.Quantity);
+            _bus.SendCommand(createProductCommand);
+        }
+        public void Delete(int id)
+        {
+            var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
+            _productRepository.Delete(product);
         }
         public IEnumerable<ProductVM> GetAllProducts()
         {

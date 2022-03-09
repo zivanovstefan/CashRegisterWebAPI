@@ -11,5 +11,6 @@ namespace CashRegister.Domain.Interfaces
     {
         IEnumerable<Product> GetAllProducts();
         void Add(Product product);
+        void Delete(Product product);
     }
 }
