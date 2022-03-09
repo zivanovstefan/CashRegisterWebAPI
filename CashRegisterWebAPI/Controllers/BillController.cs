@@ -13,12 +13,12 @@ namespace CashRegister.API.Controllers
         {
             _billService = billService;
         }
-        [HttpGet]
+        [HttpGet("Get all bills")]
         public IEnumerable<BillVM> GetAllBills()
         {
             return _billService.GetAllBills();
         }
-        [HttpPost]
+        [HttpPost("Add new bill")]
         public IActionResult CreateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
