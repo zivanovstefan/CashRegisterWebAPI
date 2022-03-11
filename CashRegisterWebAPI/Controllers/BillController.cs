@@ -23,7 +23,6 @@ namespace CashRegister.API.Controllers
         {
             if (billVM == null)
                 return BadRequest();
-
             _billService.Create(billVM);
             return Ok(billVM);
         }

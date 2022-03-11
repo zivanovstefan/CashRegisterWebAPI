@@ -28,6 +28,11 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Remove(productBill);
             _context.SaveChanges();
         }
+        public void Update(ProductBill productBill)
+        {
+            _context.Update(productBill);
+            _context.SaveChanges();
+        }
 
         public IEnumerable<ProductBill> GetProductBills()
         {

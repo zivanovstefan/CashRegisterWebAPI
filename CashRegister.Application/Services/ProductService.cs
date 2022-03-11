@@ -22,6 +22,23 @@ namespace CashRegister.Application.Services
             _productRepository = productRepository;
             _bus = bus;
          }
+
+        public void Create(ProductVM productVM)
+        {
+            var createProductCommand = new CreateProductCommand(
+                productVM.Id,
+                productVM.Name,
+                productVM.Price
+                );
+            _bus.SendCommand(createProductCommand);
+        }
+
+        public void Delete(int id)
+        {
+            var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
+            _productRepository.Delete(product);
+        }
+
         public ICollection<ProductVM> GetAllProducts()
         {
             var products = _productRepository.GetAllProducts();

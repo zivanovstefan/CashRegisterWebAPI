@@ -22,5 +22,19 @@ namespace CashRegister.API.Controllers
         {
             return _productService.GetAllProducts();
         }
+        [HttpPost("Create product")]
+        public IActionResult Create([FromBody] ProductVM productVM)
+        {
+            if (productVM == null)
+                return BadRequest();
+            _productService.Create(productVM);
+            return Ok();
+        }
+        [HttpDelete("Delete product")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            _productService.Delete(id);
+            return Ok();
+        }
     }
 }
