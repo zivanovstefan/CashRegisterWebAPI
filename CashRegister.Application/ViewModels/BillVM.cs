@@ -13,6 +13,6 @@ namespace CashRegister.Application.ViewModels
         public string PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
         public int CreditCardNumber { get; set; }
-        public ICollection<ProductBillVM> BillProducts { get; set; }
+        //public ICollection<ProductBillVM> BillProducts { get; set; }
     }
 }
