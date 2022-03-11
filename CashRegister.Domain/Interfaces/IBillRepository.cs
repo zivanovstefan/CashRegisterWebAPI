@@ -10,9 +10,9 @@ namespace CashRegister.Domain.Interfaces
     public interface IBillRepository
     {
         void Add(Bill bill);
-        void Update(Bill bill,long id);
+        void Update(Bill bill,ulong id);
         void Delete(Bill bill);
         IEnumerable<Bill> GetAllBills();
-        Bill GetBillByID(long id);
+        Bill GetBillByID(ulong id);
     }
 }

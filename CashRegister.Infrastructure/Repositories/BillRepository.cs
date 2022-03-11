@@ -25,7 +25,7 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Add(bill);
             _context.SaveChanges();
         }
-        public void Update(Bill bill, long billNumber)
+        public void Update(Bill bill, ulong billNumber)
         {
             var chosenBill = GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             if (chosenBill != null)
@@ -41,7 +41,7 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Remove(bill);
             _context.SaveChanges();
         }
-        public Bill GetBillByID(long billNumber)
+        public Bill GetBillByID(ulong billNumber)
         {
             var bill = _context.Bills.FirstOrDefault(x => x.BillNumber == billNumber);
             return bill;

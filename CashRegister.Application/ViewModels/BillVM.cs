@@ -9,7 +9,7 @@ namespace CashRegister.Application.ViewModels
 {
     public class BillVM
     {
-        public long BillNumber { get; set; }
+        public ulong BillNumber { get; set; }
         public string PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
         public int CreditCardNumber { get; set; }

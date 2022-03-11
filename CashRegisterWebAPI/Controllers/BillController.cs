@@ -35,13 +35,13 @@ namespace CashRegister.API.Controllers
             return Ok(billVM);
         }
         [HttpDelete("Delete bill{billNumber}")]
-        public IActionResult DeleteBill([FromRoute] long billNumber)
+        public IActionResult DeleteBill([FromRoute] ulong billNumber)
         {
             _billService.Delete(billNumber);
             return Ok(billNumber);
         }
         [HttpGet("GetBillByID{billNumber}")]
-        public BillVM GetBillByID([FromRoute] long billNumber)
+        public BillVM GetBillByID([FromRoute] ulong billNumber)
         {
             var bill = _billService.GetBillByID(billNumber);
             return bill;
