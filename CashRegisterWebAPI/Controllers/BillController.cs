@@ -1,6 +1,7 @@
 ﻿using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using IbanNet;
 namespace CashRegister.API.Controllers
 {
     [ApiController]
@@ -23,6 +24,7 @@ namespace CashRegister.API.Controllers
         {
             if (billVM == null)
                 return BadRequest();
+            
             _billService.Create(billVM);
             return Ok(billVM);
         }
