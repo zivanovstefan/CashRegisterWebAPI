@@ -17,20 +17,8 @@ namespace CashRegister.API.Controllers
             _logger = logger;
             _productService = productService;
         }
-        [HttpPost("Add product")]
-        public IActionResult Create([FromBody] ProductVM productVM)
-        {
-            _productService.Create(productVM);
-                return Ok();
-        }
-        [HttpDelete("Delete")]
-        public IActionResult Delete([FromRoute] int id)
-        {
-            _productService.Delete(id);
-            return Ok(id);
-        }
-        [HttpGet]
-        public IEnumerable<ProductVM> GetAllBills()
+        [HttpGet("Get all products")]
+        public IEnumerable<ProductVM> GetAllProducts()
         {
             return _productService.GetAllProducts();
         }

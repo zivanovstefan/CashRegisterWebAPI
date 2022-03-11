@@ -16,16 +16,6 @@ namespace CashRegister.Infrastructure.Repositories
         {
             _context = context;
         }
-        public void Add(Product product)
-        {
-            _context.Products.Add(product);
-            _context.SaveChanges();
-        }
-        public void Delete(Product product)
-        {
-            _context.Products.Remove(product);
-            _context.SaveChanges();
-        }
         public IEnumerable<Product> GetAllProducts()
         {
             return _context.Products;

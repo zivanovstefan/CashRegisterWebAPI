@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Domain.Commands
 {
-    public class ProductCommand : Command
+    public class ProductBillCommand : Command
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int BillNumber { get; set; }
+        public int ProductId { get; set; }
+        public decimal ProductsPrice { get; set; }
     }
 }

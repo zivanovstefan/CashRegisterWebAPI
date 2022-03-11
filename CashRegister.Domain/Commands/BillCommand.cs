@@ -9,7 +9,7 @@ namespace CashRegister.Domain.Commands
 {
     public class BillCommand : Command
     {
-        public int Id { get; set; }
+        public int BillNumber { get; set; }
         public string PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
         public int CreditCardNumber { get; set; }

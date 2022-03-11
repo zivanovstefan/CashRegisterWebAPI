@@ -9,8 +9,6 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IProductService
     {
-        void Create(ProductVM productVM);
-        void Delete(int id);
-        IEnumerable<ProductVM> GetAllProducts();
+        ICollection<ProductVM> GetAllProducts();
     }
 }

@@ -21,7 +21,7 @@ namespace CashRegister.Domain.CommandHandlers
         {
             var bill = new Bill()
             {
-                Id = request.Id,
+                BillNumber = request.BillNumber,
                 PaymentMethod = request.PaymentMethod,
                 TotalPrice = request.TotalPrice,
                 CreditCardNumber = request.CreditCardNumber

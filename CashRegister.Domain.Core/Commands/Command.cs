@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Domain.Core.Commands
 {
-    public class Command : Message
+    public abstract class Command : Message
     {
         public DateTime TimeStamp { get; protected set; }
         protected Command()

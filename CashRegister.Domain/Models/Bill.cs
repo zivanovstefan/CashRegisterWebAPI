@@ -10,10 +10,10 @@ namespace CashRegister.Domain.Models
     public class Bill
     {
         [Key]
-        public int Id { get; set; }
+        public int BillNumber { get; set; }
         public string PaymentMethod { get; set; }
         public decimal TotalPrice { get; set; }
         public int CreditCardNumber { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<ProductBill> BillProducts { get; set; }
     }
 }

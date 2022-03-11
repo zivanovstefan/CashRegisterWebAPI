@@ -7,7 +7,7 @@ using MediatR;
 
 namespace CashRegister.Domain.Core.Events
 {
-    public class Message : IRequest<bool>
+    public abstract class Message : IRequest<bool>
     {
         public string MessageType { get; protected set; }
         protected Message ()

@@ -3,6 +3,7 @@ using CashRegister.Infrastructure.Context;
 using Microsoft.OpenApi.Models;
 using MediatR;
 using CashRegister.Infrastructure;
+using CashRegister.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 static void RegisterService(IServiceCollection services)
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<CashRegisterDBContext>(options => options.UseNpgsq
 builder.Services.AddMediatR(typeof(Program));
 RegisterService(builder.Services);
 
+//builder.Services.RegisterAutoMapper();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
