@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Application.Interfaces
 {
-    public interface IProductService
+    public interface IProductBillService
     {
-        ICollection<ProductVM> GetAllProducts();
-        void Create(ProductVM productVM);
-        void Delete(int id);
+        ICollection<ProductBillVM> GetAllBillProducts();
+        void AddProductToBill(ProductBillVM productBillVM);
+        void Delete(int id1, int id2);
     }
 }

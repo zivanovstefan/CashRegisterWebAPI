@@ -2,6 +2,7 @@
 using CashRegister.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CashRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(CashRegisterDBContext))]
-    partial class CashRegisterDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220309095522_QuantityColoumnInProductTableAdded")]
+    partial class QuantityColoumnInProductTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,11 +25,11 @@ namespace CashRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
                 {
-                    b.Property<int>("BillNumber")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BillNumber"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CreditCardNumber")
                         .HasColumnType("integer");
@@ -39,9 +41,9 @@ namespace CashRegister.Infrastructure.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
 
-                    b.HasKey("BillNumber");
+                    b.HasKey("Id");
 
-                    b.ToTable("Bills", (string)null);
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
@@ -52,6 +54,9 @@ namespace CashRegister.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BillId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -59,59 +64,30 @@ namespace CashRegister.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
-                });
+                    b.HasIndex("BillId");
 
-            modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
-                {
-                    b.Property<int>("BillNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductQuantity")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("ProductsPrice")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("BillNumber", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("BillProducts", (string)null);
-                });
-
-            modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
-                {
-                    b.HasOne("CashRegister.Domain.Models.Bill", "Bill")
-                        .WithMany("BillProducts")
-                        .HasForeignKey("BillNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CashRegister.Domain.Models.Product", "Product")
-                        .WithMany("BillProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
-                {
-                    b.Navigation("BillProducts");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
                 {
-                    b.Navigation("BillProducts");
+                    b.HasOne("CashRegister.Domain.Models.Bill", "Bill")
+                        .WithMany("Products")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+                });
+
+            modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

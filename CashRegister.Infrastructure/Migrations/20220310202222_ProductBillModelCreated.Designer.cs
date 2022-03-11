@@ -2,6 +2,7 @@
 using CashRegister.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CashRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(CashRegisterDBContext))]
-    partial class CashRegisterDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220310202222_ProductBillModelCreated")]
+    partial class ProductBillModelCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasKey("BillNumber");
 
-                    b.ToTable("Bills", (string)null);
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
@@ -61,7 +63,7 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
@@ -82,7 +84,7 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("BillProducts", (string)null);
+                    b.ToTable("BillProducts");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
