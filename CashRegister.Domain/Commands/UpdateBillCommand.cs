@@ -9,7 +9,7 @@ namespace CashRegister.Domain.Commands
 {
     public class UpdateBillCommand : BillCommand
     {
-        public UpdateBillCommand(int billNumber, string paymentMethod, decimal totalPrice, int creditCardNumber)
+        public UpdateBillCommand(long billNumber, string paymentMethod, decimal totalPrice, int creditCardNumber)
         {
             BillNumber = billNumber;
             PaymentMethod = paymentMethod;

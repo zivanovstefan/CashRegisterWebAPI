@@ -14,7 +14,7 @@ namespace CashRegister.Domain.Models
         public decimal ProductsPrice { get; set; }
 
         [ForeignKey("Bill")]
-        public int BillNumber { get; set; }
+        public long BillNumber { get; set; }
         public Bill Bill { get; set; }
 
         [ForeignKey("Product")]
