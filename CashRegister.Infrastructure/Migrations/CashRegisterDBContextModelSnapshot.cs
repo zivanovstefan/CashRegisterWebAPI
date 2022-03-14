@@ -23,14 +23,12 @@ namespace CashRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
                 {
-                    b.Property<int>("BillNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BillNumber"));
-
-                    b.Property<int>("CreditCardNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreditCardNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -41,7 +39,7 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasKey("BillNumber");
 
-                    b.ToTable("Bills", (string)null);
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
@@ -61,13 +59,13 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
                 {
-                    b.Property<int>("BillNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
@@ -82,7 +80,7 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("BillProducts", (string)null);
+                    b.ToTable("BillProducts");
                 });
 
             modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>

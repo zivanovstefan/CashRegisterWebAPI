@@ -47,7 +47,7 @@ namespace CashRegister.Application.Services
                 productBillVM.ProductsPrice);
             _bus.SendCommand(addProductsCommand);
         }
-        public void Delete(ulong id1, int id2)
+        public void Delete(string id1, int id2)
         {
             var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x =>x.BillNumber == id1 && x.ProductId ==id2);
         }

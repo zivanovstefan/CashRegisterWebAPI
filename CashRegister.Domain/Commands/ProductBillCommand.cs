@@ -9,7 +9,7 @@ namespace CashRegister.Domain.Commands
 {
     public class ProductBillCommand : Command
     {
-        public ulong BillNumber { get; set; }
+        public string BillNumber { get; set; }
         public int ProductId { get; set; }
         public decimal ProductsPrice { get; set; }
     }

@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CashRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(CashRegisterDBContext))]
-    [Migration("20220310202222_ProductBillModelCreated")]
-    partial class ProductBillModelCreated
+    [Migration("20220314073449_CreditCardNumberToString")]
+    partial class CreditCardNumberToString
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,14 +25,12 @@ namespace CashRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
                 {
-                    b.Property<int>("BillNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BillNumber"));
-
-                    b.Property<int>("CreditCardNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreditCardNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -68,8 +66,8 @@ namespace CashRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
                 {
-                    b.Property<int>("BillNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
