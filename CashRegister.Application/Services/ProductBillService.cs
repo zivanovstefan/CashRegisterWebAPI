@@ -29,12 +29,12 @@ namespace CashRegister.Application.Services
                 foreach (var billProduct in billProducts)
                 {
                     result.Add(new ProductBillVM
-                        {
+                    {
                         BillNumber = billProduct.BillNumber,
                         ProductId = billProduct.ProductId,
                         ProductQuantity = billProduct.ProductQuantity,
-                        ProductsPrice = billProduct.ProductsPrice
-                    });
+                        ProductsPrice = (billProduct.ProductsPrice * billProduct.ProductQuantity)
+                    }); ;
                 }
             }
             return result;
