@@ -9,6 +9,7 @@ namespace CashRegister.API.Validator
         {
             RuleFor(b => b.BillNumber).Length(18);
             RuleFor(b => b.BillNumber).Must(isBillNumberValid).WithMessage("Bill number is not valid");
+            RuleFor(b => b.TotalPrice).LessThanOrEqualTo(5000);
         }
         private bool isBillNumberValid(string billNumber)
         {
