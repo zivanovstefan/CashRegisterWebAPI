@@ -11,7 +11,7 @@ namespace CashRegister.Application.ViewModels
     public class ProductBillVM
     {
         [ForeignKey("Bill")]
-        public int BillNumber { get; set; }
+        public string BillNumber { get; set; }
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public int ProductQuantity { get; set; }

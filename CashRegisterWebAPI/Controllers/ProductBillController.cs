@@ -25,7 +25,7 @@ namespace CashRegister.API.Controllers
             return Ok();
         }
         [HttpDelete("Delete bill product")]
-        public IActionResult Delete([FromRoute]int id, int id1)
+        public IActionResult Delete([FromRoute]string id, int id1)
         {
             _productBillService.Delete(id, id1);
             return Ok();

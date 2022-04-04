@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CashRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(CashRegisterDBContext))]
-    [Migration("20220307193544_OneToMany_BillToProduct")]
-    partial class OneToMany_BillToProduct
+    [Migration("20220311124220_BillProductsDatabase")]
+    partial class BillProductsDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,11 +25,11 @@ namespace CashRegister.Infrastructure.Migrations
 
             modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("CreditCardNumber")
+                        .HasColumnType("integer");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -38,7 +38,7 @@ namespace CashRegister.Infrastructure.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
 
-                    b.HasKey("Id");
+                    b.HasKey("BillNumber");
 
                     b.ToTable("Bills");
                 });
@@ -51,9 +51,6 @@ namespace CashRegister.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BillId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -63,20 +60,57 @@ namespace CashRegister.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BillId");
-
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
+            modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
+                {
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ProductsPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("BillNumber", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BillProducts");
+                });
+
+            modelBuilder.Entity("CashRegister.Domain.Models.ProductBill", b =>
                 {
                     b.HasOne("CashRegister.Domain.Models.Bill", "Bill")
-                        .WithMany()
-                        .HasForeignKey("BillId")
+                        .WithMany("BillProducts")
+                        .HasForeignKey("BillNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CashRegister.Domain.Models.Product", "Product")
+                        .WithMany("BillProducts")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bill");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("CashRegister.Domain.Models.Bill", b =>
+                {
+                    b.Navigation("BillProducts");
+                });
+
+            modelBuilder.Entity("CashRegister.Domain.Models.Product", b =>
+                {
+                    b.Navigation("BillProducts");
                 });
 #pragma warning restore 612, 618
         }

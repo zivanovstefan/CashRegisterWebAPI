@@ -8,7 +8,7 @@ namespace CashRegister.Domain.Commands
 {
     public class AddProductsCommand : ProductBillCommand
     {
-        public AddProductsCommand(int billNumber, int productId, decimal productsPrice)
+        public AddProductsCommand(string billNumber, int productId, decimal productsPrice)
         {
             BillNumber = billNumber;
             ProductId = productId;

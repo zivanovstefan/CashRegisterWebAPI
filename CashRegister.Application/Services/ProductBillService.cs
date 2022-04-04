@@ -29,12 +29,12 @@ namespace CashRegister.Application.Services
                 foreach (var billProduct in billProducts)
                 {
                     result.Add(new ProductBillVM
-                        {
+                    {
                         BillNumber = billProduct.BillNumber,
                         ProductId = billProduct.ProductId,
                         ProductQuantity = billProduct.ProductQuantity,
-                        ProductsPrice = billProduct.ProductsPrice
-                    });
+                        ProductsPrice = (billProduct.ProductsPrice * billProduct.ProductQuantity)
+                    }); ;
                 }
             }
             return result;
@@ -47,7 +47,7 @@ namespace CashRegister.Application.Services
                 productBillVM.ProductsPrice);
             _bus.SendCommand(addProductsCommand);
         }
-        public void Delete(int id1, int id2)
+        public void Delete(string id1, int id2)
         {
             var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x =>x.BillNumber == id1 && x.ProductId ==id2);
         }

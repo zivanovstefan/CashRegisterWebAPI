@@ -33,6 +33,7 @@ namespace CashRegister.Infrastructure
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductBillService, ProductBillService>();
+            services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
             //Infrastructure layer
             services.AddScoped<IProductBillRepository, ProductBillRepository>();
             services.AddScoped<IBillRepository, BillRepository>();

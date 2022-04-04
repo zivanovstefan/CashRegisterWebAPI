@@ -4,6 +4,8 @@ using Microsoft.OpenApi.Models;
 using MediatR;
 using CashRegister.Infrastructure;
 using CashRegister.API.Configurations;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 static void RegisterService(IServiceCollection services)
@@ -12,7 +14,13 @@ static void RegisterService(IServiceCollection services)
 }
 
 // Add services to the container.
-
+//FLUENT VALIDATION
+builder.Services.AddControllers().AddFluentValidation(options =>
+{
+    options.ImplicitlyValidateChildProperties = true;
+    options.ImplicitlyValidateRootCollectionElements = true;
+    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,3 +52,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//v2

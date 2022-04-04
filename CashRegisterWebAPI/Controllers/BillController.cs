@@ -1,6 +1,9 @@
 ﻿using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using CashRegister.API.Validator;
+using FluentValidation;
+
 namespace CashRegister.API.Controllers
 {
     [ApiController]
@@ -22,9 +25,11 @@ namespace CashRegister.API.Controllers
         public IActionResult CreateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
+            {
                 return BadRequest();
-            _billService.Create(billVM);
-            return Ok(billVM);
+            }
+                _billService.Create(billVM);
+                return Ok(billVM);
         }
         [HttpPatch("Update bill")]
         public IActionResult UpdateBill([FromBody] BillVM billVM)
@@ -35,13 +40,13 @@ namespace CashRegister.API.Controllers
             return Ok(billVM);
         }
         [HttpDelete("Delete bill{billNumber}")]
-        public IActionResult DeleteBill([FromRoute] int billNumber)
+        public IActionResult DeleteBill([FromRoute] string billNumber)
         {
             _billService.Delete(billNumber);
             return Ok(billNumber);
         }
         [HttpGet("GetBillByID{billNumber}")]
-        public BillVM GetBillByID([FromRoute] int billNumber)
+        public BillVM GetBillByID([FromRoute] string billNumber)
         {
             var bill = _billService.GetBillByID(billNumber);
             return bill;

@@ -12,7 +12,7 @@ namespace CashRegister.Application.Interfaces
         ICollection<BillVM> GetAllBills();
         void Create(BillVM billVM);
         void Update(BillVM billVM);
-        void Delete(int id);
-        BillVM GetBillByID(int id);
+        void Delete(string id);
+        BillVM GetBillByID(string id);
     }
 }

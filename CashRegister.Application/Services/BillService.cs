@@ -55,12 +55,12 @@ namespace CashRegister.Application.Services
                 billVM.CreditCardNumber);
             _bus.SendCommand(updateBillCommand);
         }
-        public void Delete(int billNumber)
+        public void Delete(string billNumber)
         {
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             _billRepository.Delete(bill);
         }
-        public BillVM GetBillByID(int billNumber)
+        public BillVM GetBillByID(string billNumber)
         {
             var bill = _billRepository.GetBillByID(billNumber);
             var result = new BillVM
