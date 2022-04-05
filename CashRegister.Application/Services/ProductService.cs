@@ -17,20 +17,22 @@ namespace CashRegister.Application.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IMediatorHandler _bus;
-        public ProductService(IProductRepository productRepository, IMediatorHandler bus)
+        private readonly IMapper _mapper;
+        public ProductService(IProductRepository productRepository, IMediatorHandler bus, IMapper mapper)
         {
             _productRepository = productRepository;
             _bus = bus;
+            _mapper = mapper;
          }
 
         public void Create(ProductVM productVM)
         {
-            var createProductCommand = new CreateProductCommand(
-                productVM.Id,
-                productVM.Name,
-                productVM.Price
-                );
-            _bus.SendCommand(createProductCommand);
+            //var createProductCommand = new CreateProductCommand(
+            //    productVM.Id,
+            //    productVM.Name,
+            //    productVM.Price
+            //    );
+            _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
         }
 
         public void Delete(int id)
@@ -39,20 +41,21 @@ namespace CashRegister.Application.Services
             _productRepository.Delete(product);
         }
 
-        public ICollection<ProductVM> GetAllProducts()
+        public IEnumerable<ProductVM> GetAllProducts()
         {
-            var products = _productRepository.GetAllProducts();
-            var allProducts = new List<ProductVM>();
-            foreach (var product in products)
-            {
-                allProducts.Add(new ProductVM
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Price = product.Price
-                });
-            }
-            return allProducts;
+            return _productRepository.GetAllProducts().ProjectTo<ProductVM>(_mapper.ConfigurationProvider);
+            //var products = _productRepository.GetAllProducts();
+            //var allProducts = new List<ProductVM>();
+            //foreach (var product in products)
+            //{
+            //    allProducts.Add(new ProductVM
+            //    {
+            //        Id = product.Id,
+            //        Name = product.Name,
+            //        Price = product.Price
+            //    });
+            //}
+            //return allProducts;
         }
     }
 }

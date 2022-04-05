@@ -12,7 +12,7 @@ namespace CashRegister.Domain.Interfaces
         void Add(Bill bill);
         void Update(Bill bill,string id);
         void Delete(Bill bill);
-        IEnumerable<Bill> GetAllBills();
+        IQueryable<Bill> GetAllBills();
         Bill GetBillByID(string id);
     }
 }

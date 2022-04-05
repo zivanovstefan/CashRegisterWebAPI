@@ -30,11 +30,11 @@ namespace CashRegister.API.Controllers
             _productService.Create(productVM);
             return Ok();
         }
-        [HttpDelete("Delete product")]
-        public IActionResult Delete([FromRoute] int id)
+        [HttpDelete("Delete product{id}")]
+        public IActionResult DeleteProduct([FromRoute] int id)
         {
             _productService.Delete(id);
-            return Ok();
+            return Ok(id);
         }
     }
 }

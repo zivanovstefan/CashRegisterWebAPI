@@ -6,11 +6,13 @@ using CashRegister.Infrastructure;
 using CashRegister.API.Configurations;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using CashRegister.Application.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
-static void RegisterService(IServiceCollection services)
+void RegisterService(IServiceCollection services)
 {
     DependencyContainer.RegisterServices(services);
+    services.AddAutoMapper(typeof(AutoMapperConfiguration));
 }
 
 // Add services to the container.

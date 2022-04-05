@@ -35,7 +35,9 @@ namespace CashRegister.API.Controllers
         public IActionResult UpdateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
+            {
                 return BadRequest();
+            }
             _billService.Update(billVM);
             return Ok(billVM);
         }

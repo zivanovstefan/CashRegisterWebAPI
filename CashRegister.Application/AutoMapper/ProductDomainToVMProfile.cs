@@ -9,9 +9,9 @@ using CashRegister.Domain.Models;
 
 namespace CashRegister.Application.AutoMapper
 {
-    public class DomainToViewModelProfile : Profile
+    public class ProductDomainToVMProfile : Profile
     {
-        public DomainToViewModelProfile()
+        public ProductDomainToVMProfile()
         {
             CreateMap<Product, ProductVM>();
         }

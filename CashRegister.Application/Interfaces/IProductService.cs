@@ -9,7 +9,7 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IProductService
     {
-        ICollection<ProductVM> GetAllProducts();
+        IEnumerable<ProductVM> GetAllProducts();
         void Create(ProductVM productVM);
         void Delete(int id);
     }

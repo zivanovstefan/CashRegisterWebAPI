@@ -11,12 +11,12 @@ namespace CashRegister.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly CashRegisterDBContext _context;
+        private CashRegisterDBContext _context;
         public ProductRepository(CashRegisterDBContext context)
         {
             _context = context;
         }
-        public IEnumerable<Product> GetAllProducts()
+        public IQueryable<Product> GetAllProducts()
         {
             return _context.Products;
         }

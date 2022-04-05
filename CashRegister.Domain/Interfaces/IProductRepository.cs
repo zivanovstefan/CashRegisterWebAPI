@@ -9,7 +9,7 @@ namespace CashRegister.Domain.Interfaces
 {
     public interface IProductRepository
     {
-        IEnumerable<Product> GetAllProducts();
+        IQueryable<Product> GetAllProducts();
         void Add (Product product);
         void Delete (Product product);
     }

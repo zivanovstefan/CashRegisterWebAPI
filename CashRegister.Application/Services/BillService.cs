@@ -1,4 +1,6 @@
-﻿using CashRegister.Application.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
 using CashRegister.Domain.Core.Bus;
@@ -14,37 +16,41 @@ namespace CashRegister.Application.Services
 {
     public class BillService : IBillService
     {
+        private readonly IMapper _mapper;
         private readonly IBillRepository _billRepository;
         private readonly IMediatorHandler _bus;
-        public BillService(IBillRepository billRepository, IMediatorHandler bus)
+        public BillService(IMapper mapper, IBillRepository billRepository, IMediatorHandler bus)
         {
+            _mapper = mapper;
             _billRepository = billRepository;
             _bus = bus;
         }
-        public ICollection<BillVM> GetAllBills()
+        public IEnumerable<BillVM> GetAllBills()
         {
-            var bills = _billRepository.GetAllBills();
-            var billList = new List<BillVM>();
-            foreach (var bill in bills)
-            {
-                billList.Add(new BillVM
-                {
-                    BillNumber = bill.BillNumber,
-                    PaymentMethod = bill.PaymentMethod,
-                    TotalPrice = bill.TotalPrice,
-                    CreditCardNumber = bill.CreditCardNumber
-                });
-            }
-            return billList;
+            return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+            //var bills = _billRepository.GetAllBills();
+            //var billList = new List<BillVM>();
+            //foreach (var bill in bills)
+            //{
+            //    billList.Add(new BillVM
+            //    {
+            //        BillNumber = bill.BillNumber,
+            //        PaymentMethod = bill.PaymentMethod,
+            //        TotalPrice = bill.TotalPrice,
+            //        CreditCardNumber = bill.CreditCardNumber
+            //    });
+            //}
+            //return billList;
         }
         public void Create(BillVM billVM)
         {
-            var createBillCommand = new CreateBillCommand(
-                billVM.BillNumber,
-                billVM.PaymentMethod,
-                billVM.TotalPrice,
-                billVM.CreditCardNumber);
-            _bus.SendCommand(createBillCommand);
+            //var createBillCommand = new CreateBillCommand(
+            //    billVM.BillNumber,
+            //    billVM.PaymentMethod,
+            //    billVM.TotalPrice,
+            //    billVM.CreditCardNumber);
+            //_bus.SendCommand(createBillCommand);
+            _bus.SendCommand(_mapper.Map<CreateBillCommand>(billVM));
         }
         public void Update(BillVM billVM)
         {

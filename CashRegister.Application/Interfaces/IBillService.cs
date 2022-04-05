@@ -9,7 +9,7 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IBillService
     {
-        ICollection<BillVM> GetAllBills();
+        IEnumerable<BillVM> GetAllBills();
         void Create(BillVM billVM);
         void Update(BillVM billVM);
         void Delete(string id);
