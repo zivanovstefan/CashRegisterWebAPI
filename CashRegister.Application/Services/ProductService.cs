@@ -29,7 +29,10 @@ namespace CashRegister.Application.Services
         {
             _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
         }
-
+        public void Update(ProductVM productVM)
+        {
+            _bus.SendCommand(_mapper.Map<UpdateProductCommand>(productVM));
+        }
         public void Delete(int id)
         {
             var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);

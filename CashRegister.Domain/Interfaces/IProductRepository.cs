@@ -11,6 +11,7 @@ namespace CashRegister.Domain.Interfaces
     {
         IQueryable<Product> GetAllProducts();
         void Add (Product product);
+        void Update(Product product, int id);
         void Delete (Product product);
     }
 }

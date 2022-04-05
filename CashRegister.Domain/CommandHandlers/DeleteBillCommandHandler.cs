@@ -9,14 +9,10 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Domain.CommandHandlers
 {
-    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, bool>
+    public class DeleteBillCommandHandler : IRequestHandler<DeleteBillCommand, bool>
     {
         private readonly IProductRepository _productRepository;
-        public DeleteProductCommandHandler(IProductRepository productRepository)
-        {
-            _productRepository = productRepository;
-        }
-        public Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(DeleteBillCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

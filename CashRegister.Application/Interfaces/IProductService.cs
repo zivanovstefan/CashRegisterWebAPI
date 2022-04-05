@@ -11,6 +11,7 @@ namespace CashRegister.Application.Interfaces
     {
         IEnumerable<ProductVM> GetAllProducts();
         void Create(ProductVM productVM);
+        void Update(ProductVM productVM);
         void Delete(int id);
     }
 }

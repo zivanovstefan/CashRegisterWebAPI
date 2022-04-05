@@ -16,6 +16,8 @@ namespace CashRegister.Application.AutoMapper
         {
             CreateMap<ProductVM, CreateProductCommand>()
                 .ConstructUsing(c => new CreateProductCommand(c.Id, c.Name, c.Price));
+            CreateMap<ProductVM, UpdateProductCommand>()
+                .ConstructUsing(c => new UpdateProductCommand(c.Id, c.Name, c.Price));
         }
     }
 }

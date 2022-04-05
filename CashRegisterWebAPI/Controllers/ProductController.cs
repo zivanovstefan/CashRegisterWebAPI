@@ -30,6 +30,11 @@ namespace CashRegister.API.Controllers
             _productService.Create(productVM);
             return Ok();
         }
+        [HttpPut("Update product")]
+        public void UpdateProduct([FromBody] ProductVM productVM)
+        {
+            _productService.Update(productVM);
+        }
         [HttpDelete("Delete product{id}")]
         public IActionResult DeleteProduct([FromRoute] int id)
         {

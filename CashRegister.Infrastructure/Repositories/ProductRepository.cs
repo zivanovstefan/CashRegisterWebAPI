@@ -25,6 +25,16 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Add(product);
             _context.SaveChanges();
         }
+        public void Update(Product product, int id)
+        {
+            var chosenProduct = GetAllProducts().FirstOrDefault(x => x.Id == id);
+            if (chosenProduct != null)
+            {
+                chosenProduct.Name = product.Name;
+                chosenProduct.Price = product.Price;
+            }
+            _context.SaveChanges();
+        }
         public void Delete(Product product)
         {
             _context.Remove(product);
