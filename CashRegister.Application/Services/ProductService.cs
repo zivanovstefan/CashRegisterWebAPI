@@ -24,7 +24,6 @@ namespace CashRegister.Application.Services
             _bus = bus;
             _mapper = mapper;
          }
-
         public void Create(ProductVM productVM)
         {
             _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));

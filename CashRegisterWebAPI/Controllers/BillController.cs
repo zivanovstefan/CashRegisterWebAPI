@@ -3,6 +3,8 @@ using CashRegister.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using CashRegister.API.Validator;
 using FluentValidation;
+using CashRegister.API.ErrorModels;
+using CashRegister.Domain.Common;
 
 namespace CashRegister.API.Controllers
 {
@@ -42,9 +44,18 @@ namespace CashRegister.API.Controllers
             return Ok(billNumber);
         }
         [HttpGet("GetBillByID{billNumber}")]
-        public BillVM GetBillByID([FromRoute] string billNumber)
+        public ActionResult<BillVM> GetBillByID([FromRoute] string billNumber)
         {
             var bill = _billService.GetBillByID(billNumber);
+            if (bill == null)
+            {
+                ErrorResponseModel errorResponse = new ErrorResponseModel();
+                {
+                    errorResponse.ErrorMessage = Messages.Bill_Does_Not_Exist;
+                    errorResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
+                };
+                return NotFound(errorResponse);
+            }
             return bill;
         }
     }
