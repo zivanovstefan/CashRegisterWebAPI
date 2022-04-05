@@ -10,7 +10,6 @@ namespace CashRegister.API.Controllers
     [Route("api/[controller]")]
     public class BillController : ControllerBase
     {
-        private readonly ILogger<BillController> _logger;
         private readonly IBillService _billService;
         public BillController(IBillService billService)
         {
@@ -22,7 +21,7 @@ namespace CashRegister.API.Controllers
             return _billService.GetAllBills();
         }
         [HttpPost("Add bill")]
-        public IActionResult CreateBill([FromBody] BillVM billVM)
+        public ActionResult CreateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
             {
@@ -31,18 +30,13 @@ namespace CashRegister.API.Controllers
                 _billService.Create(billVM);
                 return Ok(billVM);
         }
-        [HttpPatch("Update bill")]
-        public IActionResult UpdateBill([FromBody] BillVM billVM)
+        [HttpPut("Update bill")]
+        public void UpdateBill([FromBody]BillVM billVM)
         {
-            if (billVM == null)
-            {
-                return BadRequest();
-            }
             _billService.Update(billVM);
-            return Ok(billVM);
         }
         [HttpDelete("Delete bill{billNumber}")]
-        public IActionResult DeleteBill([FromRoute] string billNumber)
+        public ActionResult DeleteBill([FromRoute] string billNumber)
         {
             _billService.Delete(billNumber);
             return Ok(billNumber);

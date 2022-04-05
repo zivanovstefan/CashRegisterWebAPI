@@ -27,11 +27,6 @@ namespace CashRegister.Application.Services
 
         public void Create(ProductVM productVM)
         {
-            //var createProductCommand = new CreateProductCommand(
-            //    productVM.Id,
-            //    productVM.Name,
-            //    productVM.Price
-            //    );
             _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
         }
 
@@ -44,18 +39,6 @@ namespace CashRegister.Application.Services
         public IEnumerable<ProductVM> GetAllProducts()
         {
             return _productRepository.GetAllProducts().ProjectTo<ProductVM>(_mapper.ConfigurationProvider);
-            //var products = _productRepository.GetAllProducts();
-            //var allProducts = new List<ProductVM>();
-            //foreach (var product in products)
-            //{
-            //    allProducts.Add(new ProductVM
-            //    {
-            //        Id = product.Id,
-            //        Name = product.Name,
-            //        Price = product.Price
-            //    });
-            //}
-            //return allProducts;
         }
     }
 }
