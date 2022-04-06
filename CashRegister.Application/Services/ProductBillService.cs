@@ -2,9 +2,11 @@
 using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
+using CashRegister.Domain.Common;
 using CashRegister.Domain.Core.Bus;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +22,11 @@ namespace CashRegister.Application.Services
         private readonly IProductBillRepository _productBillRepository;
         private readonly IMediatorHandler _bus;
         private readonly IMapper _mapper;
-        public ProductBillService(IProductBillRepository productBillRepository, IMediatorHandler bus, IMapper mapper)
+        public ProductBillService(IProductBillRepository productBillRepository, IMediatorHandler bus, IMapper mapper, IBillRepository billRepository, IProductRepository productRepository)
         {
             _productBillRepository = productBillRepository;
+            _productRepository = productRepository;
+            _billRepository = billRepository;
             _bus = bus;
             _mapper = mapper;
         }
@@ -41,11 +45,6 @@ namespace CashRegister.Application.Services
         }
         public void AddProductToBill(ProductBillVM productBillVM)
         {
-            //var addProductsCommand = new AddProductsCommand (
-            //    productBillVM.BillNumber,
-            //    productBillVM.ProductId,
-            //    productBillVM.ProductsPrice);
-            //_bus.SendCommand(addProductsCommand);
             var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == productBillVM.ProductId);
 
             var billproductfromDB = _productBillRepository.GetProductBills()
@@ -57,7 +56,6 @@ namespace CashRegister.Application.Services
                 billproductfromDB.ProductId = productBillVM.ProductId;
                 billproductfromDB.ProductQuantity = productBillCount;
                 billproductfromDB.ProductsPrice = (product.Price * productBillCount);
-
 
                 var bill = _billRepository.GetBillByID(billproductfromDB.BillNumber);
 
