@@ -10,6 +10,7 @@ namespace CashRegister.Domain.Interfaces
     public interface IProductBillRepository
     {
         void Add(ProductBill productBill);
+        void Update(ProductBill productBill);
         IEnumerable<ProductBill> GetProductBills();
         void Delete(ProductBill productBill);
     }

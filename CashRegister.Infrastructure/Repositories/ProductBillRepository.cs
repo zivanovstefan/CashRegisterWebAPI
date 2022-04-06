@@ -33,7 +33,6 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Update(productBill);
             _context.SaveChanges();
         }
-
         public IEnumerable<ProductBill> GetProductBills()
         {
             return _context.BillProducts;

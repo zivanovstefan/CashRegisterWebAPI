@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
+using CashRegister.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,7 @@ namespace CashRegister.Application.AutoMapper
     {
         public ProductBillDomainToProductBillVMProfile()
         {
-            CreateMap<ProductBillVM, AddProductsCommand>()
-                .ConstructUsing(c => new AddProductsCommand(c.BillNumber, c.ProductId, c.ProductsPrice));
+            CreateMap<ProductBill, ProductBillVM>();
         }
     }
 }

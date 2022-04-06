@@ -42,6 +42,31 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Remove(bill);
             _context.SaveChanges();
         }
+        public void AddToTotalPrice(int TotalPrice, string id)
+        {
+            var bill = GetAllBills().FirstOrDefault(x => x.BillNumber == id);
+
+            if (bill != null)
+            {
+                if (bill.TotalPrice == null)
+                {
+                    bill.TotalPrice = 0;
+                }
+                bill.TotalPrice = bill.TotalPrice + TotalPrice;
+            }
+            _context.SaveChanges();
+        }
+        public void RemoveFromTotalPrice(int TotalPrice, string id)
+        {
+            var bill = GetAllBills().FirstOrDefault(x => x.BillNumber == id);
+
+            if (bill != null)
+            {
+
+                bill.TotalPrice = bill.TotalPrice - TotalPrice;
+            }
+            _context.SaveChanges();
+        }
         public Bill GetBillByID(string billNumber)
         {
             var bill = _context.Bills.FirstOrDefault(x => x.BillNumber == billNumber);

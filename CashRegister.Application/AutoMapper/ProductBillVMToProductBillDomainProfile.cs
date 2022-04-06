@@ -13,7 +13,7 @@ namespace CashRegister.Application.AutoMapper
     {
         public ProductBillVMToProductBillDomainProfile()
         {
-            CreateMap<ProductBill, ProductBillVM>();
+            CreateMap<ProductBillVM, ProductBill>();
         }
     }
 }
