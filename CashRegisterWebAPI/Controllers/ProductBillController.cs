@@ -24,10 +24,10 @@ namespace CashRegister.API.Controllers
             _productBillService.AddProductToBill(productBillVM);
             return Ok();
         }
-        [HttpDelete("Delete bill product")]
-        public IActionResult Delete([FromRoute]string id, int id1)
+        [HttpDelete("Delete bill product{billNumber}, {productId}")]
+        public IActionResult Delete([FromRoute]string billNumber, int productId)
         {
-            _productBillService.Delete(id, id1);
+            _productBillService.Delete(billNumber, productId);
             return Ok();
         }
     }

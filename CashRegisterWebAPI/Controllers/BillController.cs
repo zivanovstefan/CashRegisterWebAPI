@@ -43,8 +43,8 @@ namespace CashRegister.API.Controllers
             _billService.Delete(billNumber);
             return Ok(billNumber);
         }
-        [HttpGet("GetBillByID{billNumber}")]
-        public ActionResult<BillVM> GetBillByID([FromRoute] string billNumber)
+        [HttpGet("GetBillByBillNumber{billNumber}")]
+        public ActionResult<BillVM> GetBillByBillNumber([FromRoute] string billNumber)
         {
             var bill = _billService.GetBillByID(billNumber);
             if (bill == null)

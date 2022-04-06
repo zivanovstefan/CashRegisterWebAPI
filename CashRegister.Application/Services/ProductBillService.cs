@@ -72,9 +72,9 @@ namespace CashRegister.Application.Services
                 _billRepository.AddToTotalPrice(productBill.ProductsPrice, productBill.BillNumber);
                 _productBillRepository.Add(productBill);
         }
-        public void Delete(string id1, int id2)
+        public void Delete(string billNumber, int productId)
         {
-            var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x =>x.BillNumber == id1 && x.ProductId ==id2);
+            var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x =>x.BillNumber == billNumber && x.ProductId ==productId);
         }
     }
 }
