@@ -47,20 +47,20 @@ namespace CashRegister.Application.Services
         {
             var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == productBillVM.ProductId);
 
-            var billproductfromDB = _productBillRepository.GetProductBills()
+            var productBillFromDb = _productBillRepository.GetProductBills()
                 .FirstOrDefault(x => x.BillNumber == productBillVM.BillNumber && x.ProductId == productBillVM.ProductId);
-            if (billproductfromDB != null)
+            if (productBillFromDb != null)
             {
-                int productBillCount = billproductfromDB.ProductQuantity + productBillVM.ProductQuantity;
-                billproductfromDB.BillNumber = productBillVM.BillNumber;
-                billproductfromDB.ProductId = productBillVM.ProductId;
-                billproductfromDB.ProductQuantity = productBillCount;
-                billproductfromDB.ProductsPrice = (product.Price * productBillCount);
+                int productBillCount = productBillFromDb.ProductQuantity + productBillVM.ProductQuantity;
+                productBillFromDb.BillNumber = productBillVM.BillNumber;
+                productBillFromDb.ProductId = productBillVM.ProductId;
+                productBillFromDb.ProductQuantity = productBillCount;
+                productBillFromDb.ProductsPrice = (product.Price * productBillCount);
 
-                var bill = _billRepository.GetBillByID(billproductfromDB.BillNumber);
+                var bill = _billRepository.GetBillByID(productBillFromDb.BillNumber);
 
-                _productBillRepository.Update(billproductfromDB);
-                _billRepository.AddToTotalPrice((productBillVM.ProductQuantity * product.Price), billproductfromDB.BillNumber);
+                _productBillRepository.Update(productBillFromDb);
+                _billRepository.AddToTotalPrice((productBillVM.ProductQuantity * product.Price), productBillFromDb.BillNumber);
             }
 
             productBillVM.ProductsPrice = product.Price * productBillVM.ProductQuantity;
