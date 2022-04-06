@@ -3,8 +3,9 @@ using CashRegister.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using CashRegister.API.Validator;
 using FluentValidation;
-using CashRegister.API.ErrorModels;
+using CashRegister.Application.ErrorModels;
 using CashRegister.Domain.Common;
+using CashRegister.Application.ErrorModels;
 
 namespace CashRegister.API.Controllers
 {

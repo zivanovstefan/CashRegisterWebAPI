@@ -1,5 +1,5 @@
 ﻿using System.Net;
-namespace CashRegister.API.ErrorModels
+namespace CashRegister.Application.ErrorModels
 {
     public class ErrorResponseModel
     {

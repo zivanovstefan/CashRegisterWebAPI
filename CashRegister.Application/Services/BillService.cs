@@ -48,15 +48,6 @@ namespace CashRegister.Application.Services
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             var result = _mapper.Map<BillVM>(bill);
             return result;
-            //var bill = _billRepository.GetBillByID(billNumber);
-            //var result = new BillVM
-            //{
-            //    BillNumber = bill.BillNumber,
-            //    PaymentMethod = bill.PaymentMethod,
-            //    TotalPrice = bill.TotalPrice,
-            //    CreditCardNumber = bill.CreditCardNumber
-            //};
-            //return result;
         }
     }
 }

@@ -24,7 +24,9 @@ namespace CashRegister.API.Controllers
         public IActionResult Create([FromBody] ProductVM productVM)
         {
             if (productVM == null)
+            {
                 return BadRequest();
+            }
             _productService.Create(productVM);
             return Ok();
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CashRegister.Application.ErrorModels;
 using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
@@ -20,14 +21,12 @@ namespace CashRegister.Application.Services
         private readonly IProductRepository _productRepository;
         private readonly IBillRepository _billRepository;
         private readonly IProductBillRepository _productBillRepository;
-        private readonly IMediatorHandler _bus;
         private readonly IMapper _mapper;
-        public ProductBillService(IProductBillRepository productBillRepository, IMediatorHandler bus, IMapper mapper, IBillRepository billRepository, IProductRepository productRepository)
+        public ProductBillService(IProductBillRepository productBillRepository,IMapper mapper, IBillRepository billRepository, IProductRepository productRepository)
         {
             _productBillRepository = productBillRepository;
             _productRepository = productRepository;
             _billRepository = billRepository;
-            _bus = bus;
             _mapper = mapper;
         }
         public ICollection<ProductBillVM> GetAllBillProducts()
@@ -74,7 +73,7 @@ namespace CashRegister.Application.Services
         }
         public void Delete(string billNumber, int productId)
         {
-            var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x =>x.BillNumber == billNumber && x.ProductId ==productId);
+            var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x => x.BillNumber == billNumber && x.ProductId == productId);
         }
     }
 }
