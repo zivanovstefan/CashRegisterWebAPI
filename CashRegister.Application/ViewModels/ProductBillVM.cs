@@ -15,6 +15,6 @@ namespace CashRegister.Application.ViewModels
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public int ProductQuantity { get; set; }
-        public decimal ProductsPrice { get; set; }
+        public int ProductsPrice { get; set; }
     }
 }

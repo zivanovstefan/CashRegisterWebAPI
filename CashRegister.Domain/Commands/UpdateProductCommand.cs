@@ -8,7 +8,7 @@ namespace CashRegister.Domain.Commands
 {
     public class UpdateProductCommand : ProductCommand
     {
-        public UpdateProductCommand(int id, string name, decimal price)
+        public UpdateProductCommand(int id, string name, int price)
         {
             Id = id;
             Name = name;

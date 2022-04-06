@@ -8,7 +8,7 @@ namespace CashRegister.Domain.Commands
 {
     public class CreateBillCommand : BillCommand
     {
-        public CreateBillCommand(string billNumber, string paymentMethod, decimal totalPrice, string creditCardNumber)
+        public CreateBillCommand(string billNumber, string paymentMethod, int totalPrice, string creditCardNumber)
         {
             BillNumber = billNumber;
             PaymentMethod = paymentMethod;
