@@ -14,6 +14,6 @@ namespace CashRegister.Application.Interfaces
         void Create(BillVM billVM);
         void Update(BillVM billVM);
         void Delete(string id);
-        BillVM GetBillByID(string id);
+        ActionResult<BillVM> GetBillByID(string id);
     }
 }

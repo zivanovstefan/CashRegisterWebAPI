@@ -34,9 +34,10 @@ namespace CashRegister.API.Controllers
                 return Ok(billVM);
         }
         [HttpPut("Update bill")]
-        public void UpdateBill([FromBody]BillVM billVM)
+        public ActionResult UpdateBill([FromBody]BillVM billVM)
         {
             _billService.Update(billVM);
+            return Ok(billVM);
         }
         [HttpDelete("Delete bill{billNumber}")]
         public ActionResult DeleteBill([FromRoute] string billNumber)
@@ -45,9 +46,13 @@ namespace CashRegister.API.Controllers
             return Ok(billNumber);
         }
         [HttpGet("GetBillByBillNumber{billNumber}")]
-        public ActionResult<BillVM> GetBillByBillNumber([FromRoute] string billNumber)
+        public ActionResult GetBillByBillNumber([FromRoute] string billNumber)
         {
             var bill = _billService.GetBillByID(billNumber);
+            if (billNumber == null)
+            {
+                return BadRequest(billNumber);
+            }
             if (bill == null)
             {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
@@ -55,9 +60,9 @@ namespace CashRegister.API.Controllers
                     errorResponse.ErrorMessage = Messages.Bill_Does_Not_Exist;
                     errorResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                 };
-                return NotFound(errorResponse);
+                return BadRequest(errorResponse);
             }
-            return bill;
+            return Ok(bill);
         }
     }
 }

@@ -17,30 +17,33 @@ namespace CashRegisterAPI_Tests.ControllersTests
     [TestFixture]
     public class ProductControllerTests
     {
+        private Mock<IProductService> _productServiceMock;
+        private Mock<ProductVM> _productVMMock;
+        [SetUp]
+        public void Setup()
+        {
+            _productServiceMock = new Mock<IProductService>();
+            _productVMMock = new Mock<ProductVM>();
+        }
         [Test]
         public void GetAllProducts_Valid_ReturnsAllProducts()
         {
             //Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(x => x.GetAllProducts()).Returns(new List<ProductVM>());
-            var controller = new ProductController(productService.Object);
-
+            _productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductVM>());
+            var controller = new ProductController(_productServiceMock.Object);
             //Act
             var result = controller.GetAllProducts();
-
             //Assert
-            result.GetType().Should().Be(typeof(List<ProductVM>));
+            result.GetType().Should().Be(typeof(List<ProductVM>));        
         }
         [Test]
         public void Create_Valid_ReturnsOk()
         {
             //Arrange
-            var productVM = new Mock<ProductVM>();
-            var productService = new Mock<IProductService>();
-            productService.Setup(x => x.Create(productVM.Object));
-            var controller = new ProductController(productService.Object);
+            _productServiceMock.Setup(x => x.Create(_productVMMock.Object));
+            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.CreateProduct(productVM.Object);
+            var result = controller.CreateProduct(_productVMMock.Object);
             //Assert
             result.GetType().Should().Be(typeof(OkResult));
         }
@@ -48,12 +51,10 @@ namespace CashRegisterAPI_Tests.ControllersTests
         public void Update_Valid_ReturnsOk()
         {
             //Arrange
-            var productVM = new Mock<ProductVM>();
-            var productService = new Mock<IProductService>();
-            productService.Setup(x => x.Update(productVM.Object));
-            var controller = new ProductController(productService.Object);
+            _productServiceMock.Setup(x => x.Update(_productVMMock.Object)); // it isAny
+            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.UpdateProduct(productVM.Object);
+            var result = controller.UpdateProduct(_productVMMock.Object); // prosledjivanje objekta
             //Assert
             result.GetType().Should().Be(typeof(OkResult));
         }
@@ -61,13 +62,10 @@ namespace CashRegisterAPI_Tests.ControllersTests
         public void Delete_Valid_ReturnsOk()
         {
             //Arrange
-            var id = 5;
-            var productVM = new Mock<ProductVM>();
-            var productService = new Mock<IProductService>();
-            productService.Setup(x => x.Delete(id));
-            var controller = new ProductController(productService.Object);
+            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>()));
+            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.DeleteProduct(id);
+            var result = controller.DeleteProduct(5);
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }

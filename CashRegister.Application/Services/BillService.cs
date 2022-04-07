@@ -38,12 +38,12 @@ namespace CashRegister.Application.Services
         {
             _bus.SendCommand(_mapper.Map<UpdateBillCommand>(billVM));
         }
-            public void Delete(string billNumber)
+        public void Delete(string billNumber)
         {
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             _billRepository.Delete(bill);
         }
-        public BillVM GetBillByID(string billNumber)
+        public ActionResult<BillVM> GetBillByID(string billNumber)
         {
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             var result = _mapper.Map<BillVM>(bill);
