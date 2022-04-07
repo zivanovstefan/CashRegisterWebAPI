@@ -74,7 +74,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
         [Test]
-        public void UpdateBill_Valid_ReturnsOk()
+        public void UpdateBill_Valid_ReturnsOkObjectResult()
         {
             //Arrange
             _billServiceMock.Setup(x => x.Update(It.IsAny<BillVM>())); // it isAny
@@ -85,7 +85,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
         [Test]
-        public void Delete_Valid_ReturnsOk()
+        public void Delete_Valid_ReturnsOkObjectResult()
         {
             //Arrange
             _billServiceMock.Setup(x => x.Delete(It.IsAny<string>()));
@@ -96,7 +96,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
         [Test]
-        public void GetBillByBillNumber_BillNumberExists_Returns()
+        public void GetBillByBillNumber_BillNumberExists_ReturnsOkObjectResult()
         {
             //Arrange
             _billServiceMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new BillVM());
@@ -107,7 +107,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
         [Test]
-        public void GetBillByBillNumber_BillNumberDoes_Not_Exists_Returns()
+        public void GetBillByBillNumber_BillNumberIsNull_ReturnsBadRequest()
         {
             //Arrange
             _billServiceMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new BillVM());
