@@ -11,5 +11,6 @@ namespace CashRegister.Domain.Common
         public const string Bill_Does_Not_Exist = "Bill with entered bill number does not exist";
         public const string Product_Does_Not_Exist = "Product with entered product id does not exist";
         public const string BillProductErrorMessages = "Product with entered product id does not exist";
+        public const string CurrencyNotSupported = "Currency not supported";
     }
 }

@@ -44,10 +44,14 @@ namespace CashRegisterAPI_Tests.ServicesTests
             var amount = 1000;
             var currency = "GBP";
             //Act
-            var actualResult = new CurrencyExchangeService().Exchange(amount, currency);
+            var actualResult = new CurrencyExchangeService().Exchange(amount, currency).Result;
             //Assert
-            actualResult.Should().Throw<Exception>()
-                .WithMessage("Currency not supported");
+            //Action act = () => subject.Foo(null);
+            //act
+            //  .Should().Throw<ArgumentNullException>()
+            //  .WithMessage("?did*");
+             //actualResult.Should().Throw<Exception>()
+             //   .WithMessage("Currency not supported");
         }
     }
 }

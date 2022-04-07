@@ -22,11 +22,11 @@
   <ItemGroup>
     <Folder Include="ControllersTests\" />
     <Folder Include="MapperTests\" />
-    <Folder Include="ValidatorsTests\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CashRegister.Application\CashRegister.Application.csproj" />
+    <ProjectReference Include="..\CashRegisterWebAPI\CashRegister.API.csproj" />
   </ItemGroup>
 
 </Project>

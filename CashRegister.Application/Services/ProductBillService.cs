@@ -74,6 +74,7 @@ namespace CashRegister.Application.Services
         public void Delete(string billNumber, int productId)
         {
             var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x => x.BillNumber == billNumber && x.ProductId == productId);
+            _productBillRepository.Delete(productBill);
         }
     }
 }
