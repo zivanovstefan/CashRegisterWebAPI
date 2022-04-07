@@ -40,7 +40,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             productService.Setup(x => x.Create(productVM.Object));
             var controller = new ProductController(productService.Object);
             //Act
-            var result = controller.Create(productVM.Object);
+            var result = controller.CreateProduct(productVM.Object);
             //Assert
             result.GetType().Should().Be(typeof(OkResult));
         }

@@ -21,7 +21,7 @@ namespace CashRegister.API.Controllers
             return _productService.GetAllProducts();
         }
         [HttpPost("Create product")]
-        public IActionResult Create([FromBody] ProductVM productVM)
+        public IActionResult CreateProduct([FromBody] ProductVM productVM)
         {
             if (productVM == null)
             {
