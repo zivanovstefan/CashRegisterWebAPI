@@ -12,7 +12,7 @@ namespace CashRegister.Application.Services
     public class CurrencyExchangeService : ICurrencyExchangeService
     {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<int> Exchange(int amount, string currency)
+        public int Exchange(int amount, string currency)
         {
             int result = 0;
             if (currency is "EUR")
