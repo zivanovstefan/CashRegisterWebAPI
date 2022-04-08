@@ -19,10 +19,12 @@ namespace CashRegisterAPI_Tests.ControllersTests
     {
         private Mock<IProductService> _productServiceMock;
         private Mock<ProductVM> _productVMMock;
+        private ProductController _controller;
         [SetUp]
         public void Setup()
         {
             _productServiceMock = new Mock<IProductService>();
+            _controller = new ProductController(_productServiceMock.Object);
             _productVMMock = new Mock<ProductVM>();
         }
         [Test]
@@ -30,9 +32,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductVM>());
-            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.GetAllProducts();
+            var result = _controller.GetAllProducts();
             //Assert
             result.GetType().Should().Be(typeof(List<ProductVM>));        
         }
@@ -41,31 +42,48 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _productServiceMock.Setup(x => x.Create(_productVMMock.Object));
-            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.CreateProduct(_productVMMock.Object);
+            var result = _controller.CreateProduct(_productVMMock.Object);
             //Assert
             result.GetType().Should().Be(typeof(OkResult));
+        }
+        [Test]
+        public void Create_BillVMIsNull_ReturnsBadRequest()
+        {
+            //Arrange
+            _productServiceMock.Setup(x => x.Create(_productVMMock.Object));
+            //Act
+            var result = _controller.CreateProduct(null);
+            //Assert
+            result.GetType().Should().Be(typeof(BadRequestResult));
         }
         [Test]
         public void Update_Valid_ReturnsOk()
         {
             //Arrange
-            _productServiceMock.Setup(x => x.Update(_productVMMock.Object)); // it isAny
-            var controller = new ProductController(_productServiceMock.Object);
+            _productServiceMock.Setup(x => x.Update(_productVMMock.Object));
             //Act
-            var result = controller.UpdateProduct(_productVMMock.Object); // prosledjivanje objekta
+            var result = _controller.UpdateProduct(_productVMMock.Object);
             //Assert
             result.GetType().Should().Be(typeof(OkResult));
+        }
+        [Test]
+        public void Update_BillVMIsNull_ReturnsBadRequest()
+        {
+            //Arrange
+            _productServiceMock.Setup(x => x.Update(_productVMMock.Object));
+            //Act
+            var result = _controller.UpdateProduct(null);
+            //Assert
+            result.GetType().Should().Be(typeof(BadRequestResult));
         }
         [Test]
         public void Delete_Valid_ReturnsOk()
         {
             //Arrange
             _productServiceMock.Setup(x => x.Delete(It.IsAny<int>()));
-            var controller = new ProductController(_productServiceMock.Object);
             //Act
-            var result = controller.DeleteProduct(5);
+            var result = _controller.DeleteProduct(5);
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }

@@ -33,6 +33,10 @@ namespace CashRegister.API.Controllers
         [HttpPut("Update product")]
         public IActionResult UpdateProduct([FromBody] ProductVM productVM)
         {
+            if (productVM == null)
+            {
+                return BadRequest();
+            }
             _productService.Update(productVM);
             return Ok();
         }

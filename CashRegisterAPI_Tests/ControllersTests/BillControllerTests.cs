@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CashRegisterAPI_Tests.ControllersTests
 {
     [TestFixture]
-    public class BillContollerTests
+    public class BillControllerTests
     {
         private Mock<IBillService> _billServiceMock;
         private Mock<BillVM> _billVMMock;
@@ -30,13 +30,6 @@ namespace CashRegisterAPI_Tests.ControllersTests
             validVM = new BillVM()
             {
                 BillNumber = " 200000000007540220",
-                PaymentMethod = "MasterCard",
-                TotalPrice = 1000,
-                CreditCardNumber = "371449635398431"
-            };
-            invalidVM = new BillVM()
-            {
-                BillNumber = "4433443",
                 PaymentMethod = "MasterCard",
                 TotalPrice = 1000,
                 CreditCardNumber = "371449635398431"
@@ -64,14 +57,14 @@ namespace CashRegisterAPI_Tests.ControllersTests
         }
         //ZA PROVERU
         [Test]
-        public void CreateBill_Invalid_ReturnsBadRequest()
+        public void CreateBill_BillVMisNull_ReturnsBadRequest()
         {
             //Arrange
             _billServiceMock.Setup(x => x.Create(It.IsAny<BillVM>()));
             //Act
-            var result = _controller.CreateBill(invalidVM);
+            var result = _controller.CreateBill(null);
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.GetType().Should().Be(typeof(BadRequestResult));
         }
         [Test]
         public void UpdateBill_Valid_ReturnsOkObjectResult()
@@ -80,6 +73,16 @@ namespace CashRegisterAPI_Tests.ControllersTests
             _billServiceMock.Setup(x => x.Update(It.IsAny<BillVM>())); // it isAny
             //Act
             var result = _controller.UpdateBill(_billVMMock.Object); // prosledjivanje objekta
+            //Assert
+            result.GetType().Should().Be(typeof(OkObjectResult));
+        }
+        [Test]
+        public void UpdateBill_BillVMIsNull_ReturnsBadRequest()
+        {
+            //Arrange
+            _billServiceMock.Setup(x => x.Update(It.IsAny<BillVM>())); // it isAny
+            //Act
+            var result = _controller.UpdateBill(null); // prosledjivanje objekta
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
