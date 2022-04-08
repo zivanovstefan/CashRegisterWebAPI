@@ -20,10 +20,12 @@ namespace CashRegisterAPI_Tests.ControllersTests
         private Mock<BillVM> _billVMMock;
         private BillVM validVM;
         private BillVM invalidVM;
+        private BillController _controller;
         [SetUp]
         public void Setup()
         {
             _billServiceMock = new Mock<IBillService>();
+            _controller = new BillController(_billServiceMock.Object);
             _billVMMock = new Mock<BillVM>();
             validVM = new BillVM()
             {
@@ -43,10 +45,10 @@ namespace CashRegisterAPI_Tests.ControllersTests
         [Test]
         public void GetAllBills_Valid_ReturnsAllBills()
         {
+            //Arrange
             _billServiceMock.Setup(x => x.GetAllBills()).Returns(new List<BillVM>());
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.GetAllBills();
+            var result = _controller.GetAllBills();
             //Assert
             result.GetType().Should().Be(typeof(List<BillVM>));
         }
@@ -55,9 +57,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.Create(It.IsAny<BillVM>()));
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.CreateBill(validVM);
+            var result = _controller.CreateBill(validVM);
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
@@ -67,9 +68,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.Create(It.IsAny<BillVM>()));
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.CreateBill(invalidVM);
+            var result = _controller.CreateBill(invalidVM);
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
@@ -78,9 +78,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.Update(It.IsAny<BillVM>())); // it isAny
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.UpdateBill(_billVMMock.Object); // prosledjivanje objekta
+            var result = _controller.UpdateBill(_billVMMock.Object); // prosledjivanje objekta
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
@@ -89,9 +88,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.Delete(It.IsAny<string>()));
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.DeleteBill("200000000007540220");
+            var result = _controller.DeleteBill("200000000007540220");
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
@@ -100,9 +98,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new BillVM());
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.GetBillByBillNumber("105008123123123173");
+            var result = _controller.GetBillByBillNumber("105008123123123173");
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
@@ -111,9 +108,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
         {
             //Arrange
             _billServiceMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new BillVM());
-            var controller = new BillController(_billServiceMock.Object);
             //Act
-            var result = controller.GetBillByBillNumber(null);
+            var result = _controller.GetBillByBillNumber(null);
             //Assert
             result.GetType().Should().Be(typeof(BadRequestObjectResult));
         }
