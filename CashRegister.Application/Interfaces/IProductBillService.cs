@@ -12,6 +12,6 @@ namespace CashRegister.Application.Interfaces
     {
         ICollection<ProductBillVM> GetAllBillProducts();
         void AddProductToBill(ProductBillVM productBillVM);
-        void Delete(string billNumber, int productId);
+        ActionResult<bool> DeleteProductsFromBill(string Bill_number, int Product_id, int quantity);
     }
 }

@@ -28,7 +28,12 @@ namespace CashRegister.Application.Services
         }
         public IEnumerable<BillVM> GetAllBills()
         {
-            return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+            var x = _billRepository.GetAllBills();
+
+            var y = x.ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+
+            return y;
+            //return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
         }
         public void Create(BillVM billVM)
         {

@@ -1,4 +1,5 @@
 ﻿using CashRegister.Application.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace CashRegister.Application.Interfaces
     public interface IProductService
     {
         IEnumerable<ProductVM> GetAllProducts();
-        void Create(ProductVM productVM);
-        void Update(ProductVM productVM);
-        void Delete(int id);
+        ActionResult<bool> Create(ProductVM productVM);
+        ActionResult<bool> Update(ProductVM productVM);
+        ActionResult<bool> Delete(int id);
     }
 }

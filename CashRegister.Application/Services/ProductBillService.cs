@@ -71,10 +71,38 @@ namespace CashRegister.Application.Services
                 _billRepository.AddToTotalPrice(productBill.ProductsPrice, productBill.BillNumber);
                 _productBillRepository.Add(productBill);
         }
-        public void Delete(string billNumber, int productId)
+        public ActionResult<bool> DeleteProductsFromBill(string BillNumber, int ProductId, int quantity)
         {
-            var productBill = _productBillRepository.GetProductBills().FirstOrDefault(x => x.BillNumber == billNumber && x.ProductId == productId);
-            _productBillRepository.Delete(productBill);
+            //conversion to list
+            List<ProductBill> productBills = _productBillRepository.GetProductBills().ToList();
+            var productBillsList = productBills.FirstOrDefault(x => x.BillNumber == BillNumber && x.ProductId == ProductId);
+            if (productBillsList == null)
+            {
+                return false;
+            }
+            if (quantity == productBillsList.ProductQuantity)
+            {
+                _billRepository.RemoveFromTotalPrice(productBillsList.ProductsPrice, productBillsList.BillNumber);
+                _productBillRepository.Delete(productBillsList);
+            }
+            else if (quantity > productBillsList.ProductQuantity)
+            {
+                return false;
+            }
+            else
+            {
+                var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == productBillsList.ProductId);
+                if (product == null)
+                {
+                    return false;
+                }
+                var NewProductQuantity = productBillsList.ProductQuantity - quantity;
+                productBillsList.ProductQuantity = NewProductQuantity;
+                productBillsList.ProductsPrice = (product.Price * NewProductQuantity);
+                _productBillRepository.Update(productBillsList);
+                _billRepository.RemoveFromTotalPrice((product.Price * quantity), productBillsList.BillNumber);
+            }
+            return true;
         }
     }
 }

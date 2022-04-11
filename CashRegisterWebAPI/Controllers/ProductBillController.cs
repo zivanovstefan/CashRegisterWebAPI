@@ -14,21 +14,29 @@ namespace CashRegister.API.Controllers
             _productBillService = productBillService;
         }
         [HttpGet("Get all bill products")]
-        public ICollection<ProductBillVM> GetAllBillProducts()
+        public IEnumerable<ProductBillVM> GetAllBillProducts()
         {
            return _productBillService.GetAllBillProducts();
         }
         [HttpPost("Add product to bill")]
-        public IActionResult CreateBill([FromBody] ProductBillVM productBillVM)
+        public ActionResult CreateBill([FromBody] ProductBillVM productBillVM) //ActionResult<bool>
         {
+            if (productBillVM == null)
+            {
+                return BadRequest();
+            }
             _productBillService.AddProductToBill(productBillVM);
-            return Ok();
+            return Ok(productBillVM);
+            //return true;
         }
         [HttpDelete("Delete bill product{billNumber}, {productId}")]
-        public IActionResult Delete([FromRoute]string billNumber, int productId)
+        public ActionResult<bool> Delete([FromRoute]string billNumber, int productId, int quantity)
         {
-            _productBillService.Delete(billNumber, productId);
-            return Ok();
+            if ((billNumber == "") && (productId == 0)){
+                return false;
+            }
+            _productBillService.DeleteProductsFromBill(billNumber, productId, quantity);
+            return true;
         }
     }
 }

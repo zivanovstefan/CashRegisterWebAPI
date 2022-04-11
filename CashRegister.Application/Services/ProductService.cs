@@ -10,6 +10,7 @@ using CashRegister.Domain.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Core.Bus;
 using CashRegister.Domain.Commands;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CashRegister.Application.Services
 {
@@ -24,23 +25,42 @@ namespace CashRegister.Application.Services
             _bus = bus;
             _mapper = mapper;
          }
-        public void Create(ProductVM productVM)
+        public ActionResult<bool> Create(ProductVM productVM)
         {
+            if(productVM == null)
+            {
+                return false;
+            }
             _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
+            return true;
         }
-        public void Update(ProductVM productVM)
+        public ActionResult<bool> Update(ProductVM productVM)
         {
+            if (productVM == null)
+            {
+                return false;
+            }
             _bus.SendCommand(_mapper.Map<UpdateProductCommand>(productVM));
+            return true;
         }
-        public void Delete(int id)
+        public ActionResult<bool> Delete(int id)
         {
+            if (id == 0)
+            {
+                return false;
+            }
             var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
             _productRepository.Delete(product);
+            return true;
         }
 
         public IEnumerable<ProductVM> GetAllProducts()
         {
-            return _productRepository.GetAllProducts().ProjectTo<ProductVM>(_mapper.ConfigurationProvider);
+            var x = _productRepository.GetAllProducts();
+                
+            var y = x.ProjectTo<ProductVM>(_mapper.ConfigurationProvider);
+
+            return y;
         }
     }
 }
