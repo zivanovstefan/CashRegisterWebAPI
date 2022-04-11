@@ -46,9 +46,7 @@ namespace CashRegisterAPI_Tests.MapperTests
             productBill.BillNumber = "105008123123123173";
             productBill.ProductQuantity = 1;
             productBill.ProductsPrice = 30;
-
         }
-
         [Test]
         public void CreateMap_BillToBillVM_SuccesfullyMapped()
         {

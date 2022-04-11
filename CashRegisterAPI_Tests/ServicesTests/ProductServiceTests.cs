@@ -25,13 +25,13 @@ namespace CashRegisterAPI_Tests.ServicesTests
         private Mock<IMediatorHandler> _busMock;
         private Mock<IMapper> _mapperMock;
         private Mapper _domainToVMMapper;
-        private Mapper _VMToDomainmapper;
+        private Mapper _VMToDomainMapper;
         private ProductService _productService;
         private ProductVM _productVM;
         private List<Product> _products;
         private List<ProductVM> _productsVMs;
         private Product _product;
-        private int _productId = 1;
+        private int _productId;
         [SetUp]
         public void Setup()
         {
@@ -41,8 +41,9 @@ namespace CashRegisterAPI_Tests.ServicesTests
             _busMock = new Mock<IMediatorHandler>();
             _mapperMock = new Mock<IMapper>();
             _domainToVMMapper = new Mapper(_domainToVMconfiguration);
-            _VMToDomainmapper = new Mapper(_VMToDomainConfiguration);
+            _VMToDomainMapper = new Mapper(_VMToDomainConfiguration);
             _productService = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
+            _productId = 1;
             _product = new Product()
             {
                 Id = 1,
@@ -82,7 +83,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_ValidProductVM_ReturnsTrue()
         {
             _repositoryMock.Setup(x => x.Update(_product, _productId));
-            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainmapper);
+            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainMapper);
             //Act
             var result = productService.Update(_productVM);
             //Assert
@@ -92,7 +93,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_ProductVMIsNull_ReturnsFalse()
         {
             _repositoryMock.Setup(x => x.Update(_product, _productId));
-            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainmapper);
+            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainMapper);
             //Act
             var result = _productService.Update(null);
             //Assert

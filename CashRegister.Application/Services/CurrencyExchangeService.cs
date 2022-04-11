@@ -17,7 +17,7 @@ namespace CashRegister.Application.Services
             int result = 0;
             if (currency is "EUR")
             {
-                return  result = amount / 100;
+                return result = amount / 100;
             }
             else if (currency is "USD")
             {

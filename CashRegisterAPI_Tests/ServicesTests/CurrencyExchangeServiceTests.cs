@@ -13,15 +13,25 @@ namespace CashRegisterAPI_Tests.ServicesTests
     [TestFixture]
     public class CurrencyExchangeServiceTests
     {
+        private int _amount;
+        private string _eurCurrrency;
+        private string _usdCurrency;
+        private string _notSupportedCurrency;
+        [SetUp]
+        public void Setup()
+        {
+            _amount = 1000;
+            _eurCurrrency = "EUR";
+            _usdCurrency = "USD";
+            _notSupportedCurrency = "GBP";
+        }
         [Test]
         public void Exchange_EURCurrency_ReturnsExchangedAmount()
         {
             //Arrange
-            var amount = 1000;
-            var currency = "EUR";
             var expectedResult = 10;
             //Act
-            var actualResult = new CurrencyExchangeService().Exchange(amount, currency);
+            var actualResult = new CurrencyExchangeService().Exchange(_amount, _eurCurrrency);
             //Assert
             Assert.AreEqual(expectedResult, actualResult);
         }
@@ -29,24 +39,11 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Exchange_USDCurrency_ReturnsExchangedAmount()
         {
             //Arrange
-            var amount = 1000;
-            var currency = "USD";
             var expectedResult = 20;
             //Act
-            var actualResult = new CurrencyExchangeService().Exchange(amount, currency);
+            var actualResult = new CurrencyExchangeService().Exchange(_amount, _usdCurrency);
             //Assert
             actualResult.Should().Be(expectedResult);
         }
-        //[Test]
-        //public void Exchange_NotSupportedCurrency_ThrowsException()
-        //{
-        //    //Arrange
-        //    var amount = 1000;
-        //    var currency = "GBP";
-        //    //Act
-        //    var actualResult = new CurrencyExchangeService().Exchange(amount, currency);
-        //    //Assert
-        //    Assert.Throws<Exception>("Currency not supported");
-        //}
     }
 }

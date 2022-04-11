@@ -55,7 +55,6 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
-        //ZA PROVERU
         [Test]
         public void CreateBill_BillVMisNull_ReturnsBadRequest()
         {
