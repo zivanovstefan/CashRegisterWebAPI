@@ -49,9 +49,16 @@ namespace CashRegister.Application.Services
             {
                 return false;
             }
-            var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
-            _productRepository.Delete(product);
-            return true;
+            try
+            {
+                var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
+                _productRepository.Delete(product);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public IEnumerable<ProductVM> GetAllProducts()

@@ -11,9 +11,9 @@ namespace CashRegister.Application.Interfaces
     public interface IBillService
     {
         IEnumerable<BillVM> GetAllBills();
-        void Create(BillVM billVM);
-        void Update(BillVM billVM);
-        void Delete(string id);
+        ActionResult<bool> Create(BillVM billVM);
+        ActionResult<bool> Update(BillVM billVM);
+        ActionResult<bool> Delete(string id);
         ActionResult<BillVM> GetBillByID(string id);
     }
 }

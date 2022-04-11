@@ -28,28 +28,42 @@ namespace CashRegister.Application.Services
         }
         public IEnumerable<BillVM> GetAllBills()
         {
-            var x = _billRepository.GetAllBills();
-
-            var y = x.ProjectTo<BillVM>(_mapper.ConfigurationProvider);
-
-            return y;
-            //return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+            return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
         }
-        public void Create(BillVM billVM)
+        public ActionResult<bool> Create(BillVM billVM)
         {
+            if (billVM == null)
+            {
+                return false;
+            }
             _bus.SendCommand(_mapper.Map<CreateBillCommand>(billVM));
+            return true;
         }
-        public void Update(BillVM billVM)
+        public ActionResult<bool> Update(BillVM billVM)
         {
+            if (billVM == null)
+            {
+                return false;
+            }
             _bus.SendCommand(_mapper.Map<UpdateBillCommand>(billVM));
+            return true;
         }
-        public void Delete(string billNumber)
+        public ActionResult<bool> Delete(string billNumber)
         {
+            if (billNumber == "")
+            {
+                return false;
+            }
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             _billRepository.Delete(bill);
+            return true;
         }
         public ActionResult<BillVM> GetBillByID(string billNumber)
         {
+            if (billNumber == "")
+            {
+                return null;
+            }
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             var result = _mapper.Map<BillVM>(bill);
             return result;

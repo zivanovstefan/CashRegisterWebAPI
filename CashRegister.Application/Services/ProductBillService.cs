@@ -22,12 +22,14 @@ namespace CashRegister.Application.Services
         private readonly IBillRepository _billRepository;
         private readonly IProductBillRepository _productBillRepository;
         private readonly IMapper _mapper;
-        public ProductBillService(IProductBillRepository productBillRepository,IMapper mapper, IBillRepository billRepository, IProductRepository productRepository)
+        private readonly IMediatorHandler _bus;
+        public ProductBillService(IProductBillRepository productBillRepository,IMapper mapper, IBillRepository billRepository, IProductRepository productRepository, IMediatorHandler bus)
         {
             _productBillRepository = productBillRepository;
             _productRepository = productRepository;
             _billRepository = billRepository;
             _mapper = mapper;
+            _bus = bus;
         }
         public ICollection<ProductBillVM> GetAllBillProducts()
         {
@@ -50,20 +52,19 @@ namespace CashRegister.Application.Services
                 .FirstOrDefault(x => x.BillNumber == productBillVM.BillNumber && x.ProductId == productBillVM.ProductId);
             if (productBillFromDb != null)
             {
-                int productBillCount = productBillFromDb.ProductQuantity + productBillVM.ProductQuantity;
+                int newProductQuantity = productBillFromDb.ProductQuantity + productBillVM.ProductQuantity;
                 productBillFromDb.BillNumber = productBillVM.BillNumber;
                 productBillFromDb.ProductId = productBillVM.ProductId;
-                productBillFromDb.ProductQuantity = productBillCount;
-                productBillFromDb.ProductsPrice = (product.Price * productBillCount);
+                productBillFromDb.ProductQuantity = newProductQuantity;
+                productBillFromDb.ProductsPrice = (product.Price * newProductQuantity);
 
                 var bill = _billRepository.GetBillByID(productBillFromDb.BillNumber);
-
                 _productBillRepository.Update(productBillFromDb);
                 _billRepository.AddToTotalPrice((productBillVM.ProductQuantity * product.Price), productBillFromDb.BillNumber);
             }
-
             productBillVM.ProductsPrice = product.Price * productBillVM.ProductQuantity;
 
+            //var productBill2 = _bus.SendCommand(_mapper.Map<AddProductsCommand>(productBillVM));
             var productBill = _mapper.Map<ProductBill>(productBillVM);
 
             var billFromDb = _billRepository.GetBillByID(productBillVM.BillNumber);
