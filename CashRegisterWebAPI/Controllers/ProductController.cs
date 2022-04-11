@@ -43,6 +43,10 @@ namespace CashRegister.API.Controllers
         [HttpDelete("Delete product{id}")]
         public IActionResult DeleteProduct([FromRoute] int id)
         {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
             _productService.Delete(id);
             return Ok(id);
         }

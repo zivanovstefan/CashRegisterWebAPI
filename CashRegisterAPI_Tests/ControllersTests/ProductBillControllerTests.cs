@@ -27,7 +27,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             _productVMMock = new Mock<ProductBillVM>();
         }
         [Test]
-        public void GetAllProducts_Valid_ReturnsAllProducts()
+        public void GetAllBillProducts_Valid_ReturnsAllBillProducts()
         {
             //Arrange
             _productBillServiceMock.Setup(x => x.GetAllBillProducts()).Returns(new List<ProductBillVM>());
@@ -37,7 +37,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(List<ProductBillVM>));
         }
         [Test]
-        public void CreateBill_ValidProductBillVM_ReturnsTrue()
+        public void CreateBill_ValidProductBillVM_ReturnsOkObjectResult()
         {
             //Arrange
             _productBillServiceMock.Setup(x => x.AddProductToBill(_productVMMock.Object));
@@ -47,7 +47,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
         [Test]
-        public void CreateBill_BillVMIsNull_ReturnsTrue()
+        public void CreateBill_BillVMIsNull_ReturnsBadRequestResult()
         {
             //Arrange
             _productBillServiceMock.Setup(x => x.AddProductToBill(_productVMMock.Object));
@@ -68,6 +68,45 @@ namespace CashRegisterAPI_Tests.ControllersTests
             var result = _controller.Delete(billNumber, productId, quantity);
             //Assert
             Assert.IsTrue(result.Value);
+        }
+        [Test]
+        public void Delete_BillNumberEmptyProductIdisZeroQuantityIsZero_ReturnsFalse()
+        {
+            var billNumber = "";
+            var productId = 0;
+            var quantity = 0;
+            //Arrange
+            _productBillServiceMock.Setup(x => x.DeleteProductsFromBill(billNumber, productId, quantity));
+            //Act
+            var result = _controller.Delete(billNumber, productId, quantity);
+            //Assert
+            Assert.IsFalse(result.Value);
+        }
+        [Test]
+        public void Delete_BillNumberIsValidProductIdIsZeroQuantityIsZero_ReturnsFalse()
+        {
+            var billNumber = "260005601001611379";
+            var productId = 0;
+            var quantity = 0;
+            //Arrange
+            _productBillServiceMock.Setup(x => x.DeleteProductsFromBill(billNumber, productId, quantity));
+            //Act
+            var result = _controller.Delete(billNumber, productId, quantity);
+            //Assert
+            Assert.IsFalse(result.Value);
+        }
+        [Test]
+        public void Delete_BillNumberIsValidProductIdIsValidQuantityIsZero_ReturnsFalse()
+        {
+            var billNumber = "260005601001611379";
+            var productId = 2;
+            var quantity = 0;
+            //Arrange
+            _productBillServiceMock.Setup(x => x.DeleteProductsFromBill(billNumber, productId, quantity));
+            //Act
+            var result = _controller.Delete(billNumber, productId, quantity);
+            //Assert
+            Assert.IsFalse(result.Value);
         }
     }
 }

@@ -87,5 +87,15 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Assert
             result.GetType().Should().Be(typeof(OkObjectResult));
         }
+        [Test]
+        public void Delete_IdIsZero_ReturnsOk()
+        {
+            //Arrange
+            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>()));
+            //Act
+            var result = _controller.DeleteProduct(0);
+            //Assert
+            result.GetType().Should().Be(typeof(BadRequestResult));
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
 {
     public class BillServiceTests
     {
+        private MapperConfiguration _domainToVMconfiguration;
         private Mock<IBillRepository> _repositoryMock;
         private Mock<IMediatorHandler> _busMock;
         private Mock<IMapper> _mapperMock;

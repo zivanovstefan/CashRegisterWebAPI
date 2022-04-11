@@ -116,5 +116,15 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Assert
             result.GetType().Should().Be(typeof(BadRequestObjectResult));
         }
+        [Test]
+        public void GetBillByBillNumber_BillNumberIsEmptyString_ReturnsBadRequest()
+        {
+            //Arrange
+            _billServiceMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new BillVM());
+            //Act
+            var result = _controller.GetBillByBillNumber("");
+            //Assert
+            result.GetType().Should().Be(typeof(BadRequestResult));
+        }
     }
 }

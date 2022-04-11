@@ -19,54 +19,60 @@ namespace CashRegisterAPI_Tests.ServicesTests
     [TestFixture]
     public class ProductServiceTests
     {
+        private MapperConfiguration _domainToVMconfiguration;
+        private MapperConfiguration _VMToDomainConfiguration;
         private Mock<IProductRepository> _repositoryMock;
         private Mock<IMediatorHandler> _busMock;
         private Mock<IMapper> _mapperMock;
+        private Mapper _domainToVMMapper;
+        private Mapper _VMToDomainmapper;
         private ProductService _productService;
-        private ProductVM productVM;
-        private List<Product> products;
-        private List<ProductVM> productsVMs;
-        private Product product;
+        private ProductVM _productVM;
+        private List<Product> _products;
+        private List<ProductVM> _productsVMs;
+        private Product _product;
+        private int _productId = 1;
         [SetUp]
         public void Setup()
         {
+            _domainToVMconfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductDomainToVMProfile()));
+            _VMToDomainConfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductVMToDomainProfile()));
             _repositoryMock = new Mock<IProductRepository>();
             _busMock = new Mock<IMediatorHandler>();
             _mapperMock = new Mock<IMapper>();
-            _productService = new ProductService(_repositoryMock.Object, _busMock.Object, _mapperMock.Object);
-            product = new Product()
+            _domainToVMMapper = new Mapper(_domainToVMconfiguration);
+            _VMToDomainmapper = new Mapper(_VMToDomainConfiguration);
+            _productService = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
+            _product = new Product()
             {
                 Id = 1,
                 Name = "Book",
                 Price = 50
             };
-            products = new List<Product>();
-            products.Add(product);
-            productVM = new ProductVM()
+            _products = new List<Product>();
+            _products.Add(_product);
+            _productVM = new ProductVM()
             {
                 Id = 1,
                 Name = "Book",
                 Price = 50
             };
-            productsVMs = new List<ProductVM>();
-            productsVMs.Add(productVM);
+            _productsVMs = new List<ProductVM>();
+            _productsVMs.Add(_productVM);
         }
         [Test]
         public void Create_ValidProductVM_ReturnsTrue()
         {
-            _repositoryMock.Setup(x => x.Add(product));
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductDomainToVMProfile()));
-            var mapper = new Mapper(configuration);
-
-            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, mapper);
+            _repositoryMock.Setup(x => x.Add(_product));
             //Act
-            var result = productService.Create(productVM);
+            var result = _productService.Create(_productVM);
             //Assert
             Assert.IsTrue(result.Value);
         }
         [Test]
         public void Create_ProductVMIsNull_ReturnsFalse()
         {
+            _repositoryMock.Setup(x => x.Add(_product));
             //Act
             var result = _productService.Create(null);
             //Assert
@@ -75,14 +81,18 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [Test]
         public void Update_ValidProductVM_ReturnsTrue()
         {
+            _repositoryMock.Setup(x => x.Update(_product, _productId));
+            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainmapper);
             //Act
-            var result = _productService.Update(productVM);
+            var result = productService.Update(_productVM);
             //Assert
             Assert.IsTrue(result.Value);
         }
         [Test]
         public void Update_ProductVMIsNull_ReturnsFalse()
         {
+            _repositoryMock.Setup(x => x.Update(_product, _productId));
+            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainmapper);
             //Act
             var result = _productService.Update(null);
             //Assert
@@ -109,14 +119,8 @@ namespace CashRegisterAPI_Tests.ServicesTests
         {
             //Act
             _repositoryMock.Setup(x => x.GetAllProducts()).Returns(new List<Product>().AsQueryable());
-
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductDomainToVMProfile()));
-            var mapper = new Mapper(configuration);
-
-            var service = new ProductService(_repositoryMock.Object, _busMock.Object, mapper);
-
+            var service = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
             var result = service.GetAllProducts().ToList();
-
             //Assert
             result.Should().BeOfType(typeof(List<ProductVM>));
         }

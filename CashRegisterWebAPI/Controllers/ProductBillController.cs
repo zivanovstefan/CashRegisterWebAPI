@@ -32,7 +32,17 @@ namespace CashRegister.API.Controllers
         [HttpDelete("Delete bill product{billNumber}, {productId}")]
         public ActionResult<bool> Delete([FromRoute]string billNumber, int productId, int quantity)
         {
-            if ((billNumber == "") && (productId == 0)){
+            //if ((billNumber == "") && (productId == 0) && (quantity == 0)){
+            if (billNumber == "")
+            {
+                return false;
+            }
+            if (productId == 0)
+            {
+                return false;
+            }
+            if (quantity == 0)
+            {
                 return false;
             }
             _productBillService.DeleteProductsFromBill(billNumber, productId, quantity);

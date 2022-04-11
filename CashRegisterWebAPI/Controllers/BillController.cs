@@ -53,6 +53,10 @@ namespace CashRegister.API.Controllers
             {
                 return BadRequest(billNumber);
             }
+            if (billNumber == "")
+            {
+                return BadRequest();
+            }
             if (bill == null)
             {
                 ErrorResponseModel errorResponse = new ErrorResponseModel();
