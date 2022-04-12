@@ -10,8 +10,8 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IProductBillService
     {
-        ICollection<ProductBillVM> GetAllBillProducts();
-        void AddProductToBill(ProductBillVM productBillVM);
+        ActionResult<List<ProductBillVM>> GetAllBillProducts();
+        ActionResult<bool> AddProductToBill(ProductBillVM productBillVM);
         ActionResult<bool> DeleteProductsFromBill(string Bill_number, int Product_id, int quantity);
     }
 }

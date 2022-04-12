@@ -18,6 +18,8 @@ namespace CashRegisterAPI_Tests.ControllersTests
     {
         private Mock<IProductBillService> _productBillServiceMock;
         private Mock<ProductBillVM> _productVMMock;
+        private ProductBillVM _productBillVM;
+        private List<ProductBillVM> _productBillVMs;
         private ProductBillController _controller;
         private string _validBillNumber;
         private string _emptyBillNumber;
@@ -25,6 +27,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
         private int _zeroProductId;
         private int _validQuantity;
         private int _zeroQuantity;
+        private int _productsPrice;
         [SetUp]
         public void Setup()
         {
@@ -37,26 +40,36 @@ namespace CashRegisterAPI_Tests.ControllersTests
             _zeroProductId = 0;
             _validQuantity = 2;
             _zeroQuantity = 0;
+            _productsPrice = 100;
+            _productBillVM = new ProductBillVM()
+            {
+                BillNumber = _validBillNumber,
+                ProductId = _validProductId,
+                ProductQuantity = _validQuantity,
+                ProductsPrice = _productsPrice
+            };
+            _productBillVMs = new List<ProductBillVM>();
+            _productBillVMs.Add(_productBillVM);
         }
         [Test]
         public void GetAllBillProducts_Valid_ReturnsAllBillProducts()
         {
             //Arrange
-            _productBillServiceMock.Setup(x => x.GetAllBillProducts()).Returns(new List<ProductBillVM>());
+            _productBillServiceMock.Setup(x => x.GetAllBillProducts()).Returns(_productBillVMs);
             //Act
             var result = _controller.GetAllBillProducts();
             //Assert
-            result.GetType().Should().Be(typeof(List<ProductBillVM>));
+            result.Value.Should().BeEquivalentTo(_productBillVMs);
         }
         [Test]
         public void CreateBill_ValidProductBillVM_ReturnsOkObjectResult()
         {
             //Arrange
-            _productBillServiceMock.Setup(x => x.AddProductToBill(_productVMMock.Object));
+            _productBillServiceMock.Setup(x => x.AddProductToBill(It.IsAny<ProductBillVM>())).Returns(true);
             //Act
-            var result = _controller.CreateBill(_productVMMock.Object);
+            var result = _controller.CreateBill(_productBillVM);
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            Assert.IsTrue(result.Value);
         }
         [Test]
         public void CreateBill_BillVMIsNull_ReturnsBadRequestResult()
@@ -66,7 +79,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.CreateBill(null);
             //Assert
-            result.GetType().Should().Be(typeof(BadRequestResult));
+            Assert.IsFalse(result.Value);
         }
         [Test]
         public void Delete_ValidId_ReturnsTrue()

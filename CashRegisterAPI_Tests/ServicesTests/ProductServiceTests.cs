@@ -134,12 +134,12 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void GetAllProducts_ValidMethodCall_ReturnsAllProducts()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.GetAllProducts()).Returns(new List<Product>().AsQueryable());
+            _repositoryMock.Setup(x => x.GetAllProducts()).Returns(new List<Product>());
             var service = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
             //Act
-            var result = service.GetAllProducts().ToList();
+            var result = service.GetAllProducts();
             //Assert
-            result.Should().BeOfType(typeof(List<ProductVM>));
+            result.Value.Should().BeOfType(typeof(List<ProductVM>));
         }
     }
 }

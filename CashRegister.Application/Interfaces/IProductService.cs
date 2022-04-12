@@ -10,7 +10,7 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IProductService
     {
-        IEnumerable<ProductVM> GetAllProducts();
+        ActionResult<List<ProductVM>> GetAllProducts();
         ActionResult<bool> Create(ProductVM productVM);
         ActionResult<bool> Update(ProductVM productVM);
         ActionResult<bool> Delete(int id);

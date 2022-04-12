@@ -10,6 +10,8 @@ using CashRegister.Application.Interfaces;
 using CashRegister.API.Controllers;
 using CashRegister.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using CashRegister.Application.ErrorModels;
+using CashRegister.Domain.Common;
 
 namespace CashRegisterAPI_Tests.ControllersTests
 {

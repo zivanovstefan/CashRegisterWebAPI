@@ -35,7 +35,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.GetAllProducts();
             //Assert
-            result.GetType().Should().Be(typeof(List<ProductVM>));        
+            result.Value.GetType().Should().Be(typeof(List<ProductVM>));        
         }
         [Test]
         public void Create_Valid_ReturnsOk()

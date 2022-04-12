@@ -16,7 +16,7 @@ namespace CashRegister.Infrastructure.Repositories
         {
             _context = context;
         }
-        public IQueryable<Product> GetAllProducts()
+        public IEnumerable<Product> GetAllProducts()
         {
             return _context.Products;
         }

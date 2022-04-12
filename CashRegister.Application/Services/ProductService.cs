@@ -65,13 +65,15 @@ namespace CashRegister.Application.Services
                 return true;
         }
 
-        public IEnumerable<ProductVM> GetAllProducts()
+        public ActionResult<List<ProductVM>> GetAllProducts()
         {
-            var x = _productRepository.GetAllProducts();
-                
-            var y = x.ProjectTo<ProductVM>(_mapper.ConfigurationProvider);
-
-            return y;
+            var products = _productRepository.GetAllProducts().ToList();
+            var result = new List<ProductVM>();
+            foreach(var product in products)
+            {
+                result.Add(_mapper.Map<ProductVM>(product));
+            }
+            return result;
         }
     }
 }

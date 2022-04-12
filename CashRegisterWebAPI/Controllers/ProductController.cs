@@ -16,7 +16,7 @@ namespace CashRegister.API.Controllers
             _productService = productService;
         }
         [HttpGet("Get all products")]
-        public IEnumerable<ProductVM> GetAllProducts()
+        public ActionResult<List<ProductVM>> GetAllProducts()
         {
             return _productService.GetAllProducts();
         }
