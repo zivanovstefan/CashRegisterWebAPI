@@ -14,7 +14,7 @@ namespace CashRegister.API.Controllers
             _currencyExchangeService = currencyExchangeService;
         }
         [HttpGet("Exchange{amount},{currency}")]
-        public int Exchange([FromRoute] int amount, string currency)
+        public ActionResult<int> Exchange([FromRoute] int amount, string currency)
         {
             var result = _currencyExchangeService.Exchange(amount, currency);
             return result;

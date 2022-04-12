@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CashRegister.Application.ErrorModels;
 using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
+using CashRegister.Domain.Common;
 using CashRegister.Domain.Core.Bus;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Domain.Models;
@@ -65,6 +67,15 @@ namespace CashRegister.Application.Services
                 return null;
             }
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
+            if(bill == null)
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.Bill_Does_Not_Exist,
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
             var result = _mapper.Map<BillVM>(bill);
             return result;
         }

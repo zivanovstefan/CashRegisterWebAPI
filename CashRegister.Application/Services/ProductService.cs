@@ -11,6 +11,8 @@ using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Core.Bus;
 using CashRegister.Domain.Commands;
 using Microsoft.AspNetCore.Mvc;
+using CashRegister.Application.ErrorModels;
+using CashRegister.Domain.Common;
 
 namespace CashRegister.Application.Services
 {
@@ -49,16 +51,18 @@ namespace CashRegister.Application.Services
             {
                 return false;
             }
-            try
-            {
                 var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == id);
+            if (product == null)
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.Product_Does_Not_Exist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+                return new NotFoundObjectResult(errorResponse);
+            }
                 _productRepository.Delete(product);
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         public IEnumerable<ProductVM> GetAllProducts()

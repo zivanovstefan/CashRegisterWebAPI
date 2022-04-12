@@ -64,7 +64,6 @@ namespace CashRegister.Application.Services
             }
             productBillVM.ProductsPrice = product.Price * productBillVM.ProductQuantity;
 
-            //var productBill2 = _bus.SendCommand(_mapper.Map<AddProductsCommand>(productBillVM));
             var productBill = _mapper.Map<ProductBill>(productBillVM);
 
             var billFromDb = _billRepository.GetBillByID(productBillVM.BillNumber);

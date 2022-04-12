@@ -9,6 +9,6 @@ namespace CashRegister.Application.Interfaces
 {
     public interface ICurrencyExchangeService
     {
-        int Exchange(int amount, string currency);
+        ActionResult<int> Exchange(int amount, string currency);
     }
 }

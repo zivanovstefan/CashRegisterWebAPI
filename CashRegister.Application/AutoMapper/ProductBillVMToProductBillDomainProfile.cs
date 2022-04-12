@@ -14,7 +14,7 @@ namespace CashRegister.Application.AutoMapper
     {
         public ProductBillVMToProductBillDomainProfile()
         {
-            //CreateMap<ProductBillVM, ProductBill>();
+            CreateMap<ProductBillVM, ProductBill>();
             CreateMap<ProductBillVM, AddProductsCommand>()
            .ConstructUsing(c => new AddProductsCommand(c.BillNumber, c.ProductId, c.ProductsPrice, c.ProductQuantity));
         }

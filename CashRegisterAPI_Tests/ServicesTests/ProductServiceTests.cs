@@ -13,6 +13,7 @@ using Moq;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Models;
 using CashRegister.Application.AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CashRegisterAPI_Tests.ServicesTests
 {
@@ -102,6 +103,9 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [Test]
         public void Delete_ValidId_ReturnsTrue()
         {
+            //Arrange
+            _repositoryMock.Setup(repo => repo.GetAllProducts()).Returns(_products.AsQueryable);
+            _repositoryMock.Setup(repo => repo.Delete(It.IsAny<Product>()));
             //Act
             var result = _productService.Delete(1);
             //Assert
@@ -116,11 +120,23 @@ namespace CashRegisterAPI_Tests.ServicesTests
             Assert.IsFalse(result.Value);
         }
         [Test]
+        public void Delete_IfProductDoesNotExist_ReturnsNotFoundObjectResult()
+        {
+            //Arrange
+            _repositoryMock.Setup(repo => repo.GetAllProducts()).Returns(new List<Product>().AsQueryable);
+            _repositoryMock.Setup(repo => repo.Delete(It.IsAny<Product>()));
+            //Act
+            var result = _productService.Delete(1);
+            //Assert
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
+        }
+        [Test]
         public void GetAllProducts_ValidMethodCall_ReturnsAllProducts()
         {
-            //Act
+            //Arrange
             _repositoryMock.Setup(x => x.GetAllProducts()).Returns(new List<Product>().AsQueryable());
             var service = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
+            //Act
             var result = service.GetAllProducts().ToList();
             //Assert
             result.Should().BeOfType(typeof(List<ProductVM>));
