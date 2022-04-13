@@ -15,7 +15,7 @@ namespace CashRegister.Domain.Common
         public const string Product_Does_Not_Exist = "Product with entered product id does not exist";
         //ProductBill error messages
         public const string BillTotalPriceTooHigh = "Total price must be less than or equal to 5000";
-        public const string BillProductErrorMessages = "Product with entered product id does not exist";
+        public const string BillProductErrorMessage = "BillProduct with entered product id does not exist";
         //Currency exchange error messages
         public const string CurrencyNotSupported = "Currency not supported";
         public const string InvalidAmount = "Amount must be greater than 0";

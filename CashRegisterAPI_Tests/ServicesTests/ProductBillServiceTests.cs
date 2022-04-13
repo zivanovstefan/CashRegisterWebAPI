@@ -132,7 +132,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             result.Result.Should().BeOfType<NotFoundObjectResult>();
         }
         [Test]
-        public void AddProductToBillProduct_BillProductExistAndBillsTotalCostIsLessThanOrEqual20000_ReturnsTrue()
+        public void AddProductToBillProduct_ProductBillExistAndTotalPriceIsLessThan5000_ReturnsTrue()
         {
             //Arrange
             _productRepositoryMock.Setup(x => x.GetAllProducts()).Returns(_products);
@@ -143,7 +143,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Act
             var result = _productBillService.AddProductToBill(_productBillVM);
             //Assert
-            result.Value.Should().Be(true);
+            Assert.IsTrue(result.Value);
         }
         [Test]
         public void AddProductToBillProduct_BillProductExistButBillsTotalCostGoesOver5000_ReturnsBadRequestObjectResult()
@@ -158,6 +158,28 @@ namespace CashRegisterAPI_Tests.ServicesTests
             var result = _productBillService.AddProductToBill(_productBillVM);
             //Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
+        }
+        [Test]
+        public void Delete_BillProductDoesNotExist_ReturnsNotFoundObjectResult()
+        {
+            //Arrange
+            _productBillRepositoryMock.Setup(x => x.GetProductBills()).Returns(new List<ProductBill>());
+            //Act
+            var result = _productBillService.DeleteProductsFromBill("105008123123123173", 3, 2);
+            //Assert
+            result.Result.Should().BeOfType<NotFoundObjectResult>();
+        }
+        [Test]
+        public void Delete_ValidBillNumberProductIdAndQuantity_ReturnsTrue()
+        {
+            //Arrange
+            _productBillRepositoryMock.Setup(x => x.GetProductBills()).Returns(_productBills);
+            _billRepositoryMock.Setup(x => x.RemoveFromTotalPrice(It.IsAny<int>(), It.IsAny<string>()));
+            _productBillRepositoryMock.Setup(x => x.Delete(It.IsAny<ProductBill>()));
+            //Act
+            var result = _productBillService.DeleteProductsFromBill("200000000007540220", 1, 1);
+            //Assert
+            result.Value.Should().BeTrue();
         }
     }
 }

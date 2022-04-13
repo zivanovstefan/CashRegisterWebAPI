@@ -112,7 +112,12 @@ namespace CashRegister.Application.Services
             var productBillsList = productBills.FirstOrDefault(x => x.BillNumber == BillNumber && x.ProductId == ProductId);
             if (productBillsList == null)
             {
-                return false;
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage= Messages.BillProductErrorMessage,
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+                return new NotFoundObjectResult(errorResponse);
             }
             if (quantity == productBillsList.ProductQuantity)
             {
