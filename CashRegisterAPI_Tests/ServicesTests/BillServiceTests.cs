@@ -16,21 +16,18 @@ using CashRegister.Application.AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using CashRegister.Application.ErrorModels;
 using CashRegister.Domain.Common;
+using CashRegister.Domain.Commands;
 
 namespace CashRegisterAPI_Tests.ServicesTests
 {
     public class BillServiceTests
     {
-        private MapperConfiguration _domainToVMconfiguration;
-        private MapperConfiguration _VMToDomainConfiguration;
+        private MapperConfiguration _mapperConfiguration;
         private Mock<IBillRepository> _repositoryMock;
         private Mock<IMediatorHandler> _busMock;
-        private Mock<IMapper> _mapperMock;
-        private Mapper _domainToVMMapper;
-        private Mapper _VMToDomainmapper;
+        private Mapper _mapper;
         private Mock<IEnumerable<Bill>> _billListMock;
         private BillService _billService;
-        private BillService _VMToDomainBillService;
         private Bill _bill;
         private Bill _nullBill;
         private BillVM _billVM;
@@ -40,16 +37,16 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [SetUp]
         public void Setup()
         {
-            _domainToVMconfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new BillDomainToVMProfile()));
-            _VMToDomainConfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new BillVMToDomainProfile()));
+            _mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new BillVMToDomainProfile());
+                cfg.AddProfile(new BillDomainToVMProfile());
+            });
             _repositoryMock = new Mock<IBillRepository>();
             _busMock = new Mock<IMediatorHandler>();
-            _mapperMock = new Mock<IMapper>();
-            _domainToVMMapper = new Mapper(_domainToVMconfiguration);
-            _VMToDomainmapper = new Mapper(_VMToDomainConfiguration);
+            _mapper = new Mapper(_mapperConfiguration);
             _billListMock = new Mock<IEnumerable<Bill>>();
-            _billService = new BillService(_domainToVMMapper, _repositoryMock.Object, _busMock.Object);
-            _VMToDomainBillService = new BillService(_VMToDomainmapper, _repositoryMock.Object, _busMock.Object);
+            _billService = new BillService(_mapper, _repositoryMock.Object, _busMock.Object);
             _nullBill = null;
             _bill = new Bill()
             {
@@ -74,14 +71,14 @@ namespace CashRegisterAPI_Tests.ServicesTests
             };
         }
         [Test]
-        public void GetAllBills_NoBillsInDB_ReturnsAllNotFoundObjectResult()
+        public void GetAllBills_NoBillsInDB_ReturnsNotFoundObjectResult()
         {
             //Arrange
             _repositoryMock.Setup(x => x.GetAllBills()).Returns(new List<Bill>().AsQueryable());
             //Act
             var result = _billService.GetAllBills().ToList();
             //Assert
-            result.Should().BeOfType(typeof(List<BillVM>));
+            result.Should().BeOfType<List<BillVM>>();
         }
         [Test]
         public void GetAllBills_ValidMethodCall_ReturnsAllBills()
@@ -99,9 +96,19 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Add(_bill));
             //Act
-            var result = _VMToDomainBillService.Create(_billVM);
+            var result = _billService.Create(_billVM);
             //Assert
             Assert.IsTrue(result.Value);
+        }
+        [Test]
+        public void Create_BillWithEnteredBillNumberDontExist_ReturnsFalse()
+        {
+            //Arrange
+            _busMock.Setup(x => x.SendCommand(It.IsAny<CreateBillCommand>())).Returns(Task.FromResult(false));
+            //Act
+            var result = _billService.Create(_billVM);
+            //Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
         }
         [Test]
         public void Create_BillVMIsNull_ReturnsFalse()
@@ -109,7 +116,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Add(It.IsAny<Bill>()));
             //Act
-            var result = _VMToDomainBillService.Create(null);
+            var result = _billService.Create(null);
             //Assert
             Assert.IsFalse(result.Value);
         }
@@ -119,9 +126,19 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Update(_bill, _billNumber));
             //Act
-            var result = _VMToDomainBillService.Update(_billVM);
+            var result = _billService.Update(_billVM);
             //Assert
             Assert.IsTrue(result.Value);
+        }
+        [Test]
+        public void Update_BillWithEnteredBillNumberDontExist_ReturnsBadRequest()
+        {
+            //Arrange
+            _busMock.Setup(x => x.SendCommand(It.IsAny<UpdateBillCommand>())).Returns(Task.FromResult(false));
+            //Act
+            var result = _billService.Update(_billVM);
+            //Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
         }
         [Test]
         public void Update_BillVMIsNull_ReturnsFalse()
@@ -129,7 +146,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Update(_bill, _billNumber));
             //Act
-            var result = _VMToDomainBillService.Update(null);
+            var result = _billService.Update(null);
             //Assert
             Assert.IsFalse(result.Value);
         }
@@ -139,7 +156,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Delete(_bill));
             //Act
-            var result = _VMToDomainBillService.Delete(_billNumber);
+            var result = _billService.Delete(_billNumber);
             //Assert
             Assert.IsTrue(result.Value);
         }
@@ -149,7 +166,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.Delete(_bill));
             //Act
-            var result = _VMToDomainBillService.Delete(_emptyBillNumber);
+            var result = _billService.Delete(_emptyBillNumber);
             //Assert
             Assert.IsFalse(result.Value);
         }
@@ -157,11 +174,11 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void GetBillById_IdIsValid_ReturnsBill()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.GetBillByID(_billNumber)).Returns(new Bill());
+            _repositoryMock.Setup(x => x.GetBillByID(_billNumber)).Returns(_bill);
             //Act
-            var result = _VMToDomainBillService.GetBillByID(_billNumber);
+            var result = _billService.GetBillByID(_billNumber);
             //Assert
-            result.Should().BeOfType(typeof(ActionResult<BillVM>));
+            result.Should().BeOfType<ActionResult<BillVM>>();
         }
         [Test]
         public void GetBillById_InvalidId_ReturnsNull()
@@ -169,7 +186,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Arrange
             _repositoryMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(new Bill());
             //Act
-            var result = _VMToDomainBillService.GetBillByID(null);
+            var result = _billService.GetBillByID(null);
             //Assert
             Assert.IsNull(result.Value);
         }
@@ -180,7 +197,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
             ActionResult<BillVM> expectedResult = new BadRequestObjectResult(_noBillForEnteredBillNumber);
             _repositoryMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(_nullBill);
             //Act
-            var actualResult = _VMToDomainBillService.GetBillByID(_billNumber);
+            var actualResult = _billService.GetBillByID(_billNumber);
             //Assert
             actualResult.Should().BeEquivalentTo(expectedResult);
         }

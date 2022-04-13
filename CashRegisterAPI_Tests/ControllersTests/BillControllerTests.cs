@@ -38,14 +38,14 @@ namespace CashRegisterAPI_Tests.ControllersTests
             };
         }
         [Test]
-        public void GetAllBills_Valid_ReturnsAllBills()
+        public void GetAllBills_ValidCall_ReturnsAllBills()
         {
             //Arrange
             _billServiceMock.Setup(x => x.GetAllBills()).Returns(new List<BillVM>());
             //Act
             var result = _controller.GetAllBills();
             //Assert
-            result.GetType().Should().Be(typeof(List<BillVM>));
+            result.Should().BeOfType<List<BillVM>>();
         }
         [Test]
         public void Create_Valid_ReturnsOk()
@@ -55,7 +55,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.CreateBill(validVM);
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Should().BeOfType<OkObjectResult>();
         }
         [Test]
         public void CreateBill_BillVMisNull_ReturnsBadRequest()
@@ -65,7 +65,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.CreateBill(null);
             //Assert
-            result.GetType().Should().Be(typeof(BadRequestResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
         [Test]
         public void UpdateBill_Valid_ReturnsOkObjectResult()
@@ -75,7 +75,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.UpdateBill(_billVMMock.Object); // prosledjivanje objekta
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Should().BeOfType<OkObjectResult>();
         }
         [Test]
         public void UpdateBill_BillVMIsNull_ReturnsBadRequest()
@@ -85,7 +85,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.UpdateBill(null); // prosledjivanje objekta
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
         [Test]
         public void Delete_Valid_ReturnsOkObjectResult()
@@ -95,7 +95,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.DeleteBill("200000000007540220");
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Should().BeOfType<OkObjectResult>();
         }
         [Test]
         public void GetBillByBillNumber_BillNumberExists_ReturnsOkObjectResult()
@@ -105,7 +105,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.GetBillByBillNumber("105008123123123173");
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Should().BeOfType<OkObjectResult>();
         }
         [Test]
         public void GetBillByBillNumber_BillNumberIsNull_ReturnsBadRequest()
@@ -115,7 +115,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.GetBillByBillNumber(null);
             //Assert
-            result.GetType().Should().Be(typeof(BadRequestObjectResult));
+            result.Should().BeOfType<BadRequestObjectResult>();
         }
         [Test]
         public void GetBillByBillNumber_BillNumberIsEmptyString_ReturnsBadRequest()
@@ -125,7 +125,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Act
             var result = _controller.GetBillByBillNumber("");
             //Assert
-            result.GetType().Should().Be(typeof(BadRequestResult));
+            result.Should().BeOfType<BadRequestResult>();
         }
     }
 }

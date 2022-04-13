@@ -30,7 +30,12 @@ namespace CashRegister.Application.Services
         }
         public IEnumerable<BillVM> GetAllBills()
         {
-            return _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+            var result = _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
+            if (result.Count() == 0)
+            {
+                return Enumerable.Empty<BillVM>();
+            }
+            return result;
         }
         public ActionResult<bool> Create(BillVM billVM)
         {
@@ -38,7 +43,16 @@ namespace CashRegister.Application.Services
             {
                 return false;
             }
-            _bus.SendCommand(_mapper.Map<CreateBillCommand>(billVM));
+            var task = _bus.SendCommand(_mapper.Map<CreateBillCommand>(billVM));
+            if (task == Task.FromResult(false))
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.BillAlreadyExist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
             return true;
         }
         public ActionResult<bool> Update(BillVM billVM)
@@ -47,7 +61,16 @@ namespace CashRegister.Application.Services
             {
                 return false;
             }
-            _bus.SendCommand(_mapper.Map<UpdateBillCommand>(billVM));
+            var task = _bus.SendCommand(_mapper.Map<UpdateBillCommand>(billVM));
+            if (task == Task.FromResult(false))
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.BillAlreadyExist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
             return true;
         }
         public ActionResult<bool> Delete(string billNumber)

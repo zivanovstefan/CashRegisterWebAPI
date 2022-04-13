@@ -109,8 +109,8 @@ namespace CashRegister.Application.Services
         {
             //conversion to list
             List<ProductBill> productBills = _productBillRepository.GetProductBills().ToList();
-            var productBillsList = productBills.FirstOrDefault(x => x.BillNumber == BillNumber && x.ProductId == ProductId);
-            if (productBillsList == null)
+            var productBillToUpdate = productBills.FirstOrDefault(x => x.BillNumber == BillNumber && x.ProductId == ProductId);
+            if (productBillToUpdate == null)
             {
                 var errorResponse = new ErrorResponseModel()
                 {
@@ -119,27 +119,32 @@ namespace CashRegister.Application.Services
                 };
                 return new NotFoundObjectResult(errorResponse);
             }
-            if (quantity == productBillsList.ProductQuantity)
+            if (quantity == productBillToUpdate.ProductQuantity)
             {
-                _billRepository.RemoveFromTotalPrice(productBillsList.ProductsPrice, productBillsList.BillNumber);
-                _productBillRepository.Delete(productBillsList);
+                _billRepository.RemoveFromTotalPrice(productBillToUpdate.ProductsPrice, productBillToUpdate.BillNumber);
+                _productBillRepository.Delete(productBillToUpdate);
             }
-            else if (quantity > productBillsList.ProductQuantity)
+            else if (quantity > productBillToUpdate.ProductQuantity)
             {
-                return false;
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.QuantityTooHigh,
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+                return new BadRequestObjectResult(errorResponse);
             }
             else
             {
-                var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == productBillsList.ProductId);
+                var product = _productRepository.GetAllProducts().FirstOrDefault(x => x.Id == productBillToUpdate.ProductId);
                 if (product == null)
                 {
                     return false;
                 }
-                var NewProductQuantity = productBillsList.ProductQuantity - quantity;
-                productBillsList.ProductQuantity = NewProductQuantity;
-                productBillsList.ProductsPrice = (product.Price * NewProductQuantity);
-                _productBillRepository.Update(productBillsList);
-                _billRepository.RemoveFromTotalPrice((product.Price * quantity), productBillsList.BillNumber);
+                var NewProductQuantity = productBillToUpdate.ProductQuantity - quantity;
+                productBillToUpdate.ProductQuantity = NewProductQuantity;
+                productBillToUpdate.ProductsPrice = (product.Price * NewProductQuantity);
+                _productBillRepository.Update(productBillToUpdate);
+                _billRepository.RemoveFromTotalPrice((product.Price * quantity), productBillToUpdate.BillNumber);
             }
             return true;
         }

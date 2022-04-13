@@ -61,10 +61,12 @@ namespace CashRegisterAPI_Tests.ServicesTests
             //Entities
             _productBill = new ProductBill()
             {
-                ProductQuantity = 2,
-                ProductsPrice = 50,
                 BillNumber = "200000000007540220",
-                ProductId = 1
+                ProductId = 1,
+                ProductQuantity = 2,
+                ProductsPrice = 50
+                //BillNumber = "200000000007540220",
+                //ProductId = 1
             };
             _productBills = new List<ProductBill>();
             _productBills.Add(_productBill);
@@ -150,8 +152,11 @@ namespace CashRegisterAPI_Tests.ServicesTests
         {
             //Arrange
             _productRepositoryMock.Setup(x => x.GetAllProducts()).Returns(_products);
+            //products returned
             _productBillRepositoryMock.Setup(x => x.GetProductBills()).Returns(_productBills);
+            //product bills returned
             _billRepositoryMock.Setup(x => x.GetBillByID(It.IsAny<string>())).Returns(_billOver5000);
+            //returns bill over 5000
             _productBillRepositoryMock.Setup(x => x.Update(It.IsAny<ProductBill>()));
             _billRepositoryMock.Setup(x => x.AddToTotalPrice(It.IsAny<int>(), It.IsAny<string>()));
             //Act
@@ -174,12 +179,24 @@ namespace CashRegisterAPI_Tests.ServicesTests
         {
             //Arrange
             _productBillRepositoryMock.Setup(x => x.GetProductBills()).Returns(_productBills);
+            //products returned
             _billRepositoryMock.Setup(x => x.RemoveFromTotalPrice(It.IsAny<int>(), It.IsAny<string>()));
+            //remove from total price
             _productBillRepositoryMock.Setup(x => x.Delete(It.IsAny<ProductBill>()));
             //Act
-            var result = _productBillService.DeleteProductsFromBill("200000000007540220", 1, 1);
+            var result = _productBillService.DeleteProductsFromBill("200000000007540220", 1, 2);
             //Assert
-            result.Value.Should().BeTrue();
+            Assert.IsTrue(result.Value);
+        }
+        [Test]
+        public void Delete_EnteredQuantityIsBiggerThanQuantityInDB_ReturnsNotFoundObjectResult()
+        {
+            //Arrange
+            _productBillRepositoryMock.Setup(x => x.GetProductBills()).Returns(_productBills);
+            //Act
+            var result = _productBillService.DeleteProductsFromBill("200000000007540220", 1, 5);
+            //Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
         }
     }
 }
