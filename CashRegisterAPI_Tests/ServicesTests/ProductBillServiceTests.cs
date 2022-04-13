@@ -25,12 +25,10 @@ namespace CashRegisterAPI_Tests.ServicesTests
         private Mock<IProductRepository> _productRepositoryMock;
         private Mock<IBillRepository> _billRepositoryMock;
         //Mapper Configurations
-        private MapperConfiguration _domainToVMconfiguration;
-        private MapperConfiguration _VMToDomainConfiguration;
+        private MapperConfiguration _mapperConfiguration;
         //Mappers
         private Mock<IMapper> _mapperMock;
-        private Mapper _domainToVMMapper;
-        private Mapper _VMToDomainMapper;
+        private Mapper _mapper;
         //Entities
         private ProductBillService _productBillService;
         private ProductBill _productBill;
@@ -41,23 +39,22 @@ namespace CashRegisterAPI_Tests.ServicesTests
         private List<Product> _products;
         private Bill _bill;
         private Bill _billOver5000;
-        private Mock<IMediatorHandler> _busMock;
         [SetUp]
         public void Setup()
         {
             //Mapper configurations
-            _domainToVMconfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductBillDomainToProductBillVMProfile()));
-            _VMToDomainConfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductBillVMToProductBillDomainProfile()));
+            _mapperConfiguration = new MapperConfiguration(cfg => {
+                cfg.AddProfile(new ProductBillDomainToProductBillVMProfile());
+                cfg.AddProfile(new ProductBillVMToProductBillDomainProfile());
+            });
             //Repositories and mediator
             _productBillRepositoryMock = new Mock<IProductBillRepository>();
             _productRepositoryMock = new Mock<IProductRepository>();
             _billRepositoryMock = new Mock<IBillRepository>();
-            _busMock = new Mock<IMediatorHandler>();
             //Mappers and service
             _mapperMock = new Mock<IMapper>();
-            _domainToVMMapper = new Mapper(_domainToVMconfiguration);
-            _VMToDomainMapper = new Mapper(_VMToDomainConfiguration);
-            _productBillService = new ProductBillService(_productBillRepositoryMock.Object, _domainToVMMapper, _billRepositoryMock.Object, _productRepositoryMock.Object);
+            _mapper = new Mapper(_mapperConfiguration);
+            _productBillService = new ProductBillService(_productBillRepositoryMock.Object, _mapper, _billRepositoryMock.Object, _productRepositoryMock.Object);
             //Entities
             _productBill = new ProductBill()
             {
