@@ -94,7 +94,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Create_ValidBillVM_ReturnsTrue()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Add(_bill));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<CreateBillCommand>())).Returns(Task.FromResult(true));
             //Act
             var result = _billService.Create(_billVM);
             //Assert
@@ -114,7 +114,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Create_BillVMIsNull_ReturnsFalse()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Add(It.IsAny<Bill>()));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<CreateBillCommand>())).Returns(Task.FromResult(false));
             //Act
             var result = _billService.Create(null);
             //Assert
@@ -124,7 +124,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_ValidBillVM_ReturnsTrue()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Update(_bill, _billNumber));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<UpdateBillCommand>())).Returns(Task.FromResult(true));
             //Act
             var result = _billService.Update(_billVM);
             //Assert
@@ -144,7 +144,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_BillVMIsNull_ReturnsFalse()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Update(_bill, _billNumber));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<UpdateBillCommand>())).Returns(Task.FromResult(false));
             //Act
             var result = _billService.Update(null);
             //Assert

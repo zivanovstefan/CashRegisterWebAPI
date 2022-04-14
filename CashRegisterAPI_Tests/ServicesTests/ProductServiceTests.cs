@@ -14,17 +14,20 @@ using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Models;
 using CashRegister.Application.AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using CashRegister.Domain.Commands;
 
 namespace CashRegisterAPI_Tests.ServicesTests
 {
     [TestFixture]
     public class ProductServiceTests
     {
+        private MapperConfiguration _mapperConfiguration;
         private MapperConfiguration _domainToVMconfiguration;
         private MapperConfiguration _VMToDomainConfiguration;
         private Mock<IProductRepository> _repositoryMock;
         private Mock<IMediatorHandler> _busMock;
         private Mock<IMapper> _mapperMock;
+        private Mapper _mapper;
         private Mapper _domainToVMMapper;
         private Mapper _VMToDomainMapper;
         private ProductService _productService;
@@ -36,14 +39,16 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [SetUp]
         public void Setup()
         {
-            _domainToVMconfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductDomainToVMProfile()));
-            _VMToDomainConfiguration = new MapperConfiguration(cfg => cfg.AddProfile(new ProductVMToDomainProfile()));
+            _mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new ProductDomainToVMProfile());
+                cfg.AddProfile(new ProductVMToDomainProfile());
+            });
             _repositoryMock = new Mock<IProductRepository>();
             _busMock = new Mock<IMediatorHandler>();
+            _mapper = new Mapper(_mapperConfiguration);
             _mapperMock = new Mock<IMapper>();
-            _domainToVMMapper = new Mapper(_domainToVMconfiguration);
-            _VMToDomainMapper = new Mapper(_VMToDomainConfiguration);
-            _productService = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
+            _productService = new ProductService(_repositoryMock.Object, _busMock.Object, _mapper);
             _productId = 1;
             _product = new Product()
             {
@@ -65,7 +70,8 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [Test]
         public void Create_ValidProductVM_ReturnsTrue()
         {
-            _repositoryMock.Setup(x => x.Add(_product));
+            //Arrange
+            _busMock.Setup(x => x.SendCommand(It.IsAny<CreateProductCommand>())).Returns(Task.FromResult(true));
             //Act
             var result = _productService.Create(_productVM);
             //Assert
@@ -74,7 +80,8 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [Test]
         public void Create_ProductVMIsNull_ReturnsFalse()
         {
-            _repositoryMock.Setup(x => x.Add(_product));
+            //Arrange
+            _busMock.Setup(x => x.SendCommand(It.IsAny<CreateProductCommand>())).Returns(Task.FromResult(false));
             //Act
             var result = _productService.Create(null);
             //Assert
@@ -83,18 +90,18 @@ namespace CashRegisterAPI_Tests.ServicesTests
         [Test]
         public void Update_ValidProductVM_ReturnsTrue()
         {
+            //Arrange
             _repositoryMock.Setup(x => x.Update(_product, _productId));
-            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainMapper);
             //Act
-            var result = productService.Update(_productVM);
+            var result = _productService.Update(_productVM);
             //Assert
             Assert.IsTrue(result.Value);
         }
         [Test]
         public void Update_ProductVMIsNull_ReturnsFalse()
         {
+            //Arrange
             _repositoryMock.Setup(x => x.Update(_product, _productId));
-            var productService = new ProductService(_repositoryMock.Object, _busMock.Object, _VMToDomainMapper);
             //Act
             var result = _productService.Update(null);
             //Assert
@@ -134,12 +141,11 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void GetAllProducts_ValidMethodCall_ReturnsAllProducts()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.GetAllProducts()).Returns(new List<Product>());
-            var service = new ProductService(_repositoryMock.Object, _busMock.Object, _domainToVMMapper);
+            _repositoryMock.Setup(x => x.GetAllProducts()).Returns(_products);
             //Act
-            var result = service.GetAllProducts();
+            var result = _productService.GetAllProducts();
             //Assert
-            result.Value.Should().BeOfType(typeof(List<ProductVM>));
+            result.Value.Should().BeOfType<List<ProductVM>>();
         }
     }
 }

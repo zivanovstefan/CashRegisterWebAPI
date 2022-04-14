@@ -68,6 +68,15 @@ namespace CashRegister.Application.Services
         public ActionResult<List<ProductVM>> GetAllProducts()
         {
             var products = _productRepository.GetAllProducts().ToList();
+            if (products.Count == 0)
+            {
+                var response = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.Product_Does_Not_Exist,
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+                return new NotFoundObjectResult(response);
+            }
             var result = new List<ProductVM>();
             foreach(var product in products)
             {
