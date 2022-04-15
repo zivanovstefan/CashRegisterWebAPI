@@ -55,4 +55,9 @@ app.MapControllers();
 
 app.Run();
 
+public partial class Program
+{
+
+}
+
 //v2

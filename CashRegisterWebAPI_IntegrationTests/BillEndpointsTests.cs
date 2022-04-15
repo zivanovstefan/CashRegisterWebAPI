@@ -17,34 +17,39 @@ using CashRegister.Application.Services;
 using AutoMapper;
 using CashRegister.Domain.Core.Bus;
 using Moq;
+using CashRegister.Application.AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace CashRegisterWebAPI_IntegrationTests
 {
     public class BillEndpointsTests
     {
-        private  Mock<IBillRepository> _billRepository;
-        private  IBillService _billService =
-            Substitute.For<IBillService>();
-        private  BillService billService;
-        private  IMapper _mapper =
-    Substitute.For<IMapper>();
-        private  IMediatorHandler _mediator =
+        private Mock<IBillRepository> _billRepository;
+        private IBillService _billService;
+        private IMapper _mapper;
+        private IMediatorHandler _mediator =
     Substitute.For<IMediatorHandler>();
         [SetUp]
         public void Setup()
         {
+            var mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new BillVMToDomainProfile());
+                cfg.AddProfile(new BillDomainToVMProfile());
+            });
+            _mapper = new Mapper(mapperConfiguration);
+
             _billRepository = new Mock<IBillRepository>();
-            var billService = new BillService(_mapper, _billRepository.Object, _mediator);
+            _billService = new BillService(_mapper, _billRepository.Object, _mediator);
         }
         [Test]
-        public async Task GetBillById_WhenBillExists_ReturnsBill()
+        public async Task GetAllBills_WhenBillExists_ReturnsBills()
         {
             //Arrange
             var billNumber = "200000000007540220";
-            var bill = new Bill { BillNumber = billNumber, PaymentMethod = "Visa", TotalPrice = 50, CreditCardNumber = "4111111111111111" };
-            var billVM = new BillVM { BillNumber = billNumber, PaymentMethod = "Visa" , TotalPrice = 50, CreditCardNumber = "4111111111111111"};
-            _billRepository.Setup(x => x.GetBillByID(billNumber)).Returns(bill);
-            _billService.GetBillByID(billNumber).Returns(billVM);
+            var bill = new BillVM { BillNumber = billNumber, PaymentMethod = "Visa", TotalPrice = 50, CreditCardNumber = "4111111111111111" };
+            _billService.GetBillByID(Arg.Is(billNumber)).Returns(bill);
 
             using var app = new TestApplicationFactory(x =>
             {
@@ -54,53 +59,12 @@ namespace CashRegisterWebAPI_IntegrationTests
             var httpClient = app.CreateClient();
 
             //Act
-            var response = await httpClient.GetAsync($"/api/Bill/GetBillByBillNumber{billNumber}");
-            var responseText = await response.Content.ReadAsStringAsync();
-            var billResult = JsonSerializer.Deserialize<BillVM>(responseText);
+            _billRepository.Setup(x => x.GetAllBills()).Returns(new List<Bill>().AsQueryable());
+            var response = await httpClient.GetAsync("/api/Bill/GetAllBills");
+            var responseString = await response.Content.ReadAsStringAsync();
+            var billResult = JsonSerializer.Deserialize<BillVM>(responseString);
 
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            billResult.Should().BeEquivalentTo(billVM);
-        }
-        [Test]
-        public async Task GetBillById_WhenBillDoesntExist_ReturnsNotFound()
-        {
-            //Arrange
-            _billService.GetBillByID(Arg.Any<string>()).Returns((BillVM?)null);
-
-            using var app = new TestApplicationFactory(x =>
-            {
-                x.AddSingleton(_billService);
-            });
-
-            var billNumber = "200000000007540220";
-            var httpClient = app.CreateClient();
-
-            //Act
-            var response = await httpClient.GetAsync($"/api/Bill/GetBillByBillNumber{billNumber}");
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
-        }
-        [Test]
-        public async Task GetAllBills_WhenThereAreNoBillsInDB_ReturnsOKStatusCode()
-        {
-            //Arrange
-            _billService.GetAllBills().Returns(new List<BillVM>());
-
-            using var app = new TestApplicationFactory(x =>
-            {
-                x.AddSingleton(_billService);
-            });
-
-            var httpClient = app.CreateClient();
-
-            //Act
-            var response = await httpClient.GetAsync($"/api/Bill/Get all bills");
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Contains(bill, (System.Collections.ICollection?)billResult);
         }
     }
 }
