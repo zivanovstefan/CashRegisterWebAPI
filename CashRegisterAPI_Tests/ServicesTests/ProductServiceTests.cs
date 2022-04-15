@@ -56,7 +56,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
                 Name = "Book",
                 Price = 50
             };
-            _products = new List<Product>();
+              _products = new List<Product>();
             _products.Add(_product);
             _productVM = new ProductVM()
             {
@@ -91,7 +91,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_ValidProductVM_ReturnsTrue()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Update(_product, _productId));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<UpdateProductCommand>())).Returns(Task.FromResult(true));
             //Act
             var result = _productService.Update(_productVM);
             //Assert
@@ -101,7 +101,7 @@ namespace CashRegisterAPI_Tests.ServicesTests
         public void Update_ProductVMIsNull_ReturnsFalse()
         {
             //Arrange
-            _repositoryMock.Setup(x => x.Update(_product, _productId));
+            _busMock.Setup(x => x.SendCommand(It.IsAny<UpdateProductCommand>())).Returns(Task.FromResult(false));
             //Act
             var result = _productService.Update(null);
             //Assert
