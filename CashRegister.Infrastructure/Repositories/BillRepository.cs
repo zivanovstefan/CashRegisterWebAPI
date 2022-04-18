@@ -16,7 +16,7 @@ namespace CashRegister.Infrastructure.Repositories
         {
             _context = context;
         }
-        public IQueryable<Bill> GetAllBills()
+        public IEnumerable<Bill> GetAllBills()
         {
             var bills = _context.Bills;
             return bills;

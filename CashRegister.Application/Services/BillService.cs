@@ -30,10 +30,11 @@ namespace CashRegister.Application.Services
         }
         public IEnumerable<BillVM> GetAllBills()
         {
-            var result = _billRepository.GetAllBills().ProjectTo<BillVM>(_mapper.ConfigurationProvider);
-            if (result.Count() == 0)
+            var bills = _billRepository.GetAllBills().ToList();
+            var result = new List<BillVM>();
+            foreach(var bill in bills)
             {
-                return Enumerable.Empty<BillVM>();
+                result.Add(_mapper.Map<BillVM>(bill));
             }
             return result;
         }

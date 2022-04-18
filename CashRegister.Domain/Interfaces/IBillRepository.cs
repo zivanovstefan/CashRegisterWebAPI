@@ -14,7 +14,7 @@ namespace CashRegister.Domain.Interfaces
         void Delete(Bill bill);
         void AddToTotalPrice(int TotalPrice, string id);
         void RemoveFromTotalPrice(int TotalPrice, string id);
-        IQueryable<Bill> GetAllBills();
+        IEnumerable<Bill> GetAllBills();
         Bill GetBillByID(string id);
     }
 }
