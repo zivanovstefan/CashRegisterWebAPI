@@ -20,22 +20,46 @@ namespace CashRegisterAPI_Tests.ControllersTests
         private Mock<IProductService> _productServiceMock;
         private Mock<ProductVM> _productVMMock;
         private ProductController _controller;
+        private ProductVM _product;
+        private List<ProductVM> _products;
         [SetUp]
         public void Setup()
         {
             _productServiceMock = new Mock<IProductService>();
             _controller = new ProductController(_productServiceMock.Object);
             _productVMMock = new Mock<ProductVM>();
+            _product = new ProductVM
+            {
+                Id = 1,
+                Name = "Pencil",
+                Price = 50
+            };
+            _products = new List<ProductVM>();
+            _products.Add(_product);    
         }
         [Test]
-        public void GetAllProducts_Valid_ReturnsAllProducts()
+        public void GetAllProducts_ListWithOneProduct_ReturnsAllProducts()
         {
             //Arrange
-            _productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductVM>());
+            _productServiceMock.Setup(x => x.GetAllProducts()).Returns(_products);
+            var expectedCount = 1;
             //Act
             var result = _controller.GetAllProducts();
             //Assert
-            result.Value.GetType().Should().Be(typeof(List<ProductVM>));        
+            result.Value.GetType().Should().Be(typeof(List<ProductVM>));  
+            result.Value.Count.Should().Be(expectedCount);
+        }
+        [Test]
+        public void GetAllProducts_EmptyList_ReturnsAllProducts()
+        {
+            //Arrange
+            _productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductVM>());
+            var expectedCount = 0;  
+            //Act
+            var result = _controller.GetAllProducts();
+            //Assert
+            result.Value.GetType().Should().Be(typeof(List<ProductVM>));
+            result.Value.Count.Should().Be(expectedCount);
         }
         [Test]
         public void Create_Valid_ReturnsOk()
@@ -48,7 +72,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkResult));
         }
         [Test]
-        public void Create_BillVMIsNull_ReturnsBadRequest()
+        public void Create_ProductVMIsNull_ReturnsBadRequest()
         {
             //Arrange
             _productServiceMock.Setup(x => x.Create(_productVMMock.Object));
@@ -68,7 +92,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(OkResult));
         }
         [Test]
-        public void Update_BillVMIsNull_ReturnsBadRequest()
+        public void Update_ProductVMIsNull_ReturnsBadRequest()
         {
             //Arrange
             _productServiceMock.Setup(x => x.Update(_productVMMock.Object));
@@ -78,24 +102,24 @@ namespace CashRegisterAPI_Tests.ControllersTests
             result.GetType().Should().Be(typeof(BadRequestResult));
         }
         [Test]
-        public void Delete_Valid_ReturnsOk()
+        public void Delete_ValidProductId_ReturnsTrue()
         {
             //Arrange
-            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>()));
+            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(true);
             //Act
-            var result = _controller.DeleteProduct(5);
+            var result = _controller.DeleteProduct(1);
             //Assert
-            result.GetType().Should().Be(typeof(OkObjectResult));
+            result.Value.Should().BeTrue();
         }
         [Test]
-        public void Delete_IdIsZero_ReturnsOk()
+        public void Delete_IdIsZero_ReturnsFalse()
         {
             //Arrange
-            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>()));
+            _productServiceMock.Setup(x => x.Delete(It.IsAny<int>())).Returns(false);
             //Act
             var result = _controller.DeleteProduct(0);
             //Assert
-            result.GetType().Should().Be(typeof(BadRequestResult));
+            result.Value.Should().BeFalse();
         }
     }
 }

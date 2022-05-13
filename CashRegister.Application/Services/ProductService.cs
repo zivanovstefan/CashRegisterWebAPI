@@ -33,7 +33,16 @@ namespace CashRegister.Application.Services
             {
                 return false;
             }
-            _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
+            var command = _bus.SendCommand(_mapper.Map<CreateProductCommand>(productVM));
+            if (command == Task.FromResult(false))
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.Product_Already_Exist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
             return true;
         }
         public ActionResult<bool> Update(ProductVM productVM)
@@ -72,7 +81,7 @@ namespace CashRegister.Application.Services
             {
                 var response = new ErrorResponseModel()
                 {
-                    ErrorMessage = Messages.Product_Does_Not_Exist,
+                    ErrorMessage = Messages.Products_Table_Is_Empty,
                     StatusCode = System.Net.HttpStatusCode.NotFound
                 };
                 return new NotFoundObjectResult(response);

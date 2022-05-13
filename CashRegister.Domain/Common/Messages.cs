@@ -13,7 +13,9 @@ namespace CashRegister.Domain.Common
         public const string EmptyDB = "There are no bills in database";
         public const string BillAlreadyExist = "There are no bills in database";
         //Product error messages
-        public const string Product_Does_Not_Exist = "Product with entered product id does not exist";
+        public const string Product_Already_Exist = "Product with inserted id already exists.";
+        public const string Product_Does_Not_Exist = "Product with inserted id does not exist.";
+        public const string Products_Table_Is_Empty = "Products table is empty.";
         //ProductBill error messages
         public const string BillTotalPriceTooHigh = "Total price must be less than or equal to 5000";
         public const string BillProductErrorMessage = "BillProduct with entered product id does not exist";

@@ -20,8 +20,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
     {
         private Mock<IBillService> _billServiceMock;
         private Mock<BillVM> _billVMMock;
-        private BillVM validVM;
-        private BillVM invalidVM;
+        private BillVM _validVM;
         private BillController _controller;
         [SetUp]
         public void Setup()
@@ -29,7 +28,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             _billServiceMock = new Mock<IBillService>();
             _controller = new BillController(_billServiceMock.Object);
             _billVMMock = new Mock<BillVM>();
-            validVM = new BillVM()
+            _validVM = new BillVM()
             {
                 BillNumber = " 200000000007540220",
                 PaymentMethod = "MasterCard",
@@ -53,7 +52,7 @@ namespace CashRegisterAPI_Tests.ControllersTests
             //Arrange
             _billServiceMock.Setup(x => x.Create(It.IsAny<BillVM>()));
             //Act
-            var result = _controller.CreateBill(validVM);
+            var result = _controller.CreateBill(_validVM);
             //Assert
             result.Should().BeOfType<OkObjectResult>();
         }
