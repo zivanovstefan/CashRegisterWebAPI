@@ -3,6 +3,7 @@ using System;
 using CashRegister.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CashRegister.Infrastructure.Migrations
 {
     [DbContext(typeof(CashRegisterDBContext))]
-    partial class CashRegisterDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220705140911_UserEntityAdded")]
+    partial class UserEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

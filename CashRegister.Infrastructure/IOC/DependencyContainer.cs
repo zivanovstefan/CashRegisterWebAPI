@@ -32,15 +32,18 @@ namespace CashRegister.Infrastructure
             services.AddScoped<IRequestHandler<UpdateProductCommand, bool>, UpdateProductCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteBillCommand, bool>, DeleteBillCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteProductCommand, bool>, DeleteProductCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateUserCommand, bool>, CreateUserCommandHandler>();
             //Application layer
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductBillService, ProductBillService>();
             services.AddScoped<ICurrencyExchangeService, CurrencyExchangeService>();
+            services.AddScoped<IUserService, UserService>();
             //Infrastructure layer
             services.AddScoped<IProductBillRepository, ProductBillRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<CashRegisterDBContext>();
         }
     }

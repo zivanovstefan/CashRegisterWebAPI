@@ -18,7 +18,7 @@ namespace CashRegister.API.Controllers
         {
            return _productBillService.GetAllBillProducts();
         }
-        [HttpPost("Add product to bill")]
+        [HttpPost("AddProductToBill")]
         public ActionResult<bool> CreateBill([FromBody] ProductBillVM productBillVM) //ActionResult<bool>
         {
             if (productBillVM == null)

@@ -7,13 +7,35 @@ using CashRegister.API.Configurations;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using CashRegister.Application.AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
 void RegisterService(IServiceCollection services)
 {
     DependencyContainer.RegisterServices(services);
     services.AddAutoMapper(typeof(AutoMapperConfiguration));
 }
+var provider = builder.Services.BuildServiceProvider();
+var configuration = provider.GetRequiredService<IConfiguration>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = "http://localhost:3000",
+                            ValidAudience = "http://localhost:3000",
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretKey!753159"))
+                        };
+                    });
 
 // Add services to the container.
 //FLUENT VALIDATION
@@ -39,12 +61,18 @@ RegisterService(builder.Services);
 
 //builder.Services.RegisterAutoMapper();
 var app = builder.Build();
+var config = app.Configuration;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseCors(options =>
+    options.WithOrigins("http://localhost:3000")
+   .AllowAnyHeader()
+   .AllowAnyMethod());
 }
 
 app.UseHttpsRedirection();
@@ -57,7 +85,6 @@ app.Run();
 
 public partial class Program
 {
-
 }
 
 //v2

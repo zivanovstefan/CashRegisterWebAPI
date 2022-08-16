@@ -15,12 +15,12 @@ namespace CashRegister.API.Controllers
         {
             _productService = productService;
         }
-        [HttpGet("Get all products")]
+        [HttpGet("GetAllProducts")]
         public ActionResult<List<ProductVM>> GetAllProducts()
         {
             return _productService.GetAllProducts();
         }
-        [HttpPost("Create product")]
+        [HttpPost("CreateProduct")]
         public IActionResult CreateProduct([FromBody] ProductVM productVM)
         {
             if (productVM == null)
@@ -30,7 +30,7 @@ namespace CashRegister.API.Controllers
             _productService.Create(productVM);
             return Ok();
         }
-        [HttpPut("Update product")]
+        [HttpPut("UpdateProduct")]
         public IActionResult UpdateProduct([FromBody] ProductVM productVM)
         {
             if (productVM == null)
@@ -40,7 +40,7 @@ namespace CashRegister.API.Controllers
             _productService.Update(productVM);
             return Ok();
         }
-        [HttpDelete("Delete product{id}")]
+        [HttpDelete("DeleteProduct{id}")]
         public ActionResult<bool> DeleteProduct([FromRoute] int id)
         {
             if (id == 0)

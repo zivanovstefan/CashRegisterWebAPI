@@ -34,6 +34,13 @@ namespace CashRegister.Application.Services
             var result = new List<BillVM>();
             foreach(var bill in bills)
             {
+                var billFromDb = bills.FirstOrDefault(x=>x.BillNumber == bill.BillNumber);
+                List<ProductBillVM> productBillList = new List<ProductBillVM>();
+
+                foreach(ProductBill productBill in billFromDb.BillProducts)
+                {
+                    productBillList.Add(_mapper.Map<ProductBillVM>(productBill));
+                }
                 result.Add(_mapper.Map<BillVM>(bill));
             }
             return result;

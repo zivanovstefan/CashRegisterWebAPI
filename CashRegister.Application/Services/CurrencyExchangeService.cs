@@ -14,7 +14,7 @@ namespace CashRegister.Application.Services
     public class CurrencyExchangeService : ICurrencyExchangeService
     {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<int> Exchange(int amount, string currency)
+        public ActionResult<double> Exchange(double amount, string currency)
         {
             if (amount <= 0)
             {
@@ -25,14 +25,16 @@ namespace CashRegister.Application.Services
                 };
                 return new BadRequestObjectResult(errorResponse);
             }
-            int result = 0;
+            double result = 0;
             if (currency is "EUR")
             {
-                return result = amount / 100;
+                result = amount / 117;
+                return Math.Round(result, 2);
             }
             else if (currency is "USD")
             {
-                return result = amount / 50;
+                result = amount / 112;
+                return Math.Round(result, 2);
             }
             else
             {

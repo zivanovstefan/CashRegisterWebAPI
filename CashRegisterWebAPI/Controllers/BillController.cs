@@ -5,7 +5,6 @@ using CashRegister.API.Validator;
 using FluentValidation;
 using CashRegister.Application.ErrorModels;
 using CashRegister.Domain.Common;
-using CashRegister.Application.ErrorModels;
 
 namespace CashRegister.API.Controllers
 {
@@ -28,7 +27,7 @@ namespace CashRegister.API.Controllers
         {
             return _billService.GetAllBills();
         }
-        [HttpPost("Add bill")]
+        [HttpPost("AddBill")]
         public ActionResult CreateBill([FromBody] BillVM billVM)
         {
             if (billVM == null)
@@ -38,7 +37,7 @@ namespace CashRegister.API.Controllers
                 _billService.Create(billVM);
                 return Ok(billVM);
         }
-        [HttpPut("Update bill")]
+        [HttpPut("UpdateBill")]
         public ActionResult UpdateBill([FromBody]BillVM billVM)
         {
             if (billVM == null)
@@ -48,7 +47,7 @@ namespace CashRegister.API.Controllers
             _billService.Update(billVM);
             return Ok(billVM);
         }
-        [HttpDelete("Delete bill{billNumber}")]
+        [HttpDelete("DeleteBill{billNumber}")]
         public ActionResult DeleteBill([FromRoute] string billNumber)
         {
             _billService.Delete(billNumber);

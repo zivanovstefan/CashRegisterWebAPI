@@ -37,7 +37,7 @@ namespace CashRegister.Application.Services
             {
                 var errorResponse = new ErrorResponseModel()
                 {
-                    ErrorMessage = Messages.Product_Does_Not_Exist,
+                    ErrorMessage = Messages.Bill_Has_Zero_Products,
                     StatusCode = System.Net.HttpStatusCode.BadRequest
                 };
                 return new BadRequestObjectResult(errorResponse);
