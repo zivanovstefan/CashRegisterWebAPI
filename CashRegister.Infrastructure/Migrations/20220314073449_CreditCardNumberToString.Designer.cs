@@ -36,7 +36,7 @@ namespace CashRegister.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("TotalPrice")
+                    b.Property<int>("TotalPrice")
                         .HasColumnType("numeric");
 
                     b.HasKey("BillNumber");
@@ -56,7 +56,7 @@ namespace CashRegister.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Price")
+                    b.Property<int>("Price")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
@@ -75,7 +75,7 @@ namespace CashRegister.Infrastructure.Migrations
                     b.Property<int>("ProductQuantity")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("ProductsPrice")
+                    b.Property<int>("ProductsPrice")
                         .HasColumnType("numeric");
 
                     b.HasKey("BillNumber", "ProductId");

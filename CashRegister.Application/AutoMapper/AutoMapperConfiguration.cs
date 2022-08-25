@@ -13,8 +13,8 @@ namespace CashRegister.Application.AutoMapper
         {
             return new MapperConfiguration(configuration =>
             {
-                configuration.AddProfile(new ViewModelToDomainProfile());
-                configuration.AddProfile(new DomainToViewModelProfile());
+                configuration.AddProfile(new ProductVMToDomainProfile());
+                configuration.AddProfile(new ProductDomainToVMProfile());
             });
         }
     }

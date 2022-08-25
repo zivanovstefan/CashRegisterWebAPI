@@ -12,6 +12,8 @@ namespace CashRegister.Domain.Interfaces
         void Add(Bill bill);
         void Update(Bill bill,string id);
         void Delete(Bill bill);
+        void AddToTotalPrice(int TotalPrice, string id);
+        void RemoveFromTotalPrice(int TotalPrice, string id);
         IEnumerable<Bill> GetAllBills();
         Bill GetBillByID(string id);
     }

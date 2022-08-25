@@ -1,6 +1,7 @@
 ﻿using CashRegister.Domain.Interfaces;
 using CashRegister.Domain.Models;
 using CashRegister.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace CashRegister.Infrastructure.Repositories
         }
         public IEnumerable<Bill> GetAllBills()
         {
-            return _context.Bills;
+            //var bills = _context.Bills;
+            //return bills;
+            var bills = _context.Bills.Include(x => x.BillProducts);
+            return bills;
         }
         public void Add(Bill bill)
         {
@@ -39,6 +43,30 @@ namespace CashRegister.Infrastructure.Repositories
         public void Delete(Bill bill)
         {
             _context.Remove(bill);
+            _context.SaveChanges();
+        }
+        public void AddToTotalPrice(int TotalPrice, string id)
+        {
+            var bill = GetAllBills().FirstOrDefault(x => x.BillNumber == id);
+
+            if (bill != null)
+            {
+                if (bill.TotalPrice == null)
+                {
+                    bill.TotalPrice = 0;
+                }
+                bill.TotalPrice = bill.TotalPrice + TotalPrice;
+            }
+            _context.SaveChanges();
+        }
+        public void RemoveFromTotalPrice(int TotalPrice, string id)
+        {
+            var bill = GetAllBills().FirstOrDefault(x => x.BillNumber == id);
+
+            if (bill != null)
+            {
+                bill.TotalPrice = bill.TotalPrice - TotalPrice;
+            }
             _context.SaveChanges();
         }
         public Bill GetBillByID(string billNumber)

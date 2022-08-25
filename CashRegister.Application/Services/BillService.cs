@@ -1,9 +1,14 @@
-﻿using CashRegister.Application.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CashRegister.Application.ErrorModels;
+using CashRegister.Application.Interfaces;
 using CashRegister.Application.ViewModels;
 using CashRegister.Domain.Commands;
+using CashRegister.Domain.Common;
 using CashRegister.Domain.Core.Bus;
 using CashRegister.Domain.Interfaces;
 using CashRegister.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,64 +19,96 @@ namespace CashRegister.Application.Services
 {
     public class BillService : IBillService
     {
+        private readonly IMapper _mapper;
         private readonly IBillRepository _billRepository;
         private readonly IMediatorHandler _bus;
-        public BillService(IBillRepository billRepository, IMediatorHandler bus)
+        public BillService(IMapper mapper, IBillRepository billRepository, IMediatorHandler bus)
         {
+            _mapper = mapper;
             _billRepository = billRepository;
             _bus = bus;
         }
-        public ICollection<BillVM> GetAllBills()
+        public IEnumerable<BillVM> GetAllBills()
         {
-            var bills = _billRepository.GetAllBills();
-            var billList = new List<BillVM>();
-            foreach (var bill in bills)
+            var bills = _billRepository.GetAllBills().ToList();
+            var result = new List<BillVM>();
+            foreach(var bill in bills)
             {
-                billList.Add(new BillVM
+                var billFromDb = bills.FirstOrDefault(x=>x.BillNumber == bill.BillNumber);
+                List<ProductBillVM> productBillList = new List<ProductBillVM>();
+
+                foreach(ProductBill productBill in billFromDb.BillProducts)
                 {
-                    BillNumber = bill.BillNumber,
-                    PaymentMethod = bill.PaymentMethod,
-                    TotalPrice = bill.TotalPrice,
-                    CreditCardNumber = bill.CreditCardNumber
-                });
+                    productBillList.Add(_mapper.Map<ProductBillVM>(productBill));
+                }
+                result.Add(_mapper.Map<BillVM>(bill));
             }
-            return billList;
+            return result;
         }
-        public void Create(BillVM billVM)
+        public ActionResult<bool> Create(BillVM billVM)
         {
-            var createBillCommand = new CreateBillCommand(
-                billVM.BillNumber,
-                billVM.PaymentMethod,
-                billVM.TotalPrice,
-                billVM.CreditCardNumber);
-            _bus.SendCommand(createBillCommand);
+            if (billVM == null)
+            {
+                return false;
+            }
+            var task = _bus.SendCommand(_mapper.Map<CreateBillCommand>(billVM));
+            if (task == Task.FromResult(false))
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.BillAlreadyExist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
+            return true;
         }
-        public void Update(BillVM billVM)
+        public ActionResult<bool> Update(BillVM billVM)
         {
-            var updateBillCommand = new UpdateBillCommand(
-                billVM.BillNumber,
-                billVM.PaymentMethod,
-                billVM.TotalPrice,
-                billVM.CreditCardNumber);
-            _bus.SendCommand(updateBillCommand);
+            if (billVM == null)
+            {
+                return false;
+            }
+            var task = _bus.SendCommand(_mapper.Map<UpdateBillCommand>(billVM));
+            if (task == Task.FromResult(false))
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.BillAlreadyExist,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
+            return true;
         }
-        public void Delete(string billNumber)
+        public ActionResult<bool> Delete(string billNumber)
         {
+            if (billNumber == "")
+            {
+                return false;
+            }
             var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
             _billRepository.Delete(bill);
+            return true;
         }
-        public BillVM GetBillByID(string billNumber)
+        public ActionResult<BillVM> GetBillByID(string billNumber)
         {
-            var bill = _billRepository.GetBillByID(billNumber);
-            var result = new BillVM
+            if (billNumber == "")
             {
-                BillNumber = bill.BillNumber,
-                PaymentMethod = bill.PaymentMethod,
-                TotalPrice = bill.TotalPrice,
-                CreditCardNumber = bill.CreditCardNumber
-            };
+                return null;
+            }
+            var bill = _billRepository.GetAllBills().FirstOrDefault(x => x.BillNumber == billNumber);
+            if(bill == null)
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.Bill_Does_Not_Exist,
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
+            var result = _mapper.Map<BillVM>(bill);
             return result;
-
         }
     }
 }

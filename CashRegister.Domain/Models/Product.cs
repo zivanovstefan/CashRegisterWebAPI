@@ -12,7 +12,7 @@ namespace CashRegister.Domain.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public int Price { get; set; }
         public ICollection<ProductBill> BillProducts { get; set; }
     }
 }

@@ -10,31 +10,46 @@ namespace CashRegister.API.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
-        public ProductController(ILogger<ProductController> logger, IProductService productService)
+        public ProductController(IProductService productService)
         {
-            _logger = logger;
             _productService = productService;
         }
-        [HttpGet("Get all products")]
-        public IEnumerable<ProductVM> GetAllProducts()
+        [HttpGet("GetAllProducts")]
+        public ActionResult<List<ProductVM>> GetAllProducts()
         {
             return _productService.GetAllProducts();
         }
-        [HttpPost("Create product")]
-        public IActionResult Create([FromBody] ProductVM productVM)
+        [HttpPost("CreateProduct")]
+        public IActionResult CreateProduct([FromBody] ProductVM productVM)
         {
             if (productVM == null)
+            {
                 return BadRequest();
+            }
             _productService.Create(productVM);
             return Ok();
         }
-        [HttpDelete("Delete product")]
-        public IActionResult Delete([FromRoute] int id)
+        [HttpPut("UpdateProduct")]
+        public IActionResult UpdateProduct([FromBody] ProductVM productVM)
         {
-            _productService.Delete(id);
+            if (productVM == null)
+            {
+                return BadRequest();
+            }
+            _productService.Update(productVM);
             return Ok();
+        }
+        [HttpDelete("DeleteProduct{id}")]
+        public ActionResult<bool> DeleteProduct([FromRoute] int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var deletedProduct = _productService.Delete(id);
+
+            return deletedProduct;
         }
     }
 }

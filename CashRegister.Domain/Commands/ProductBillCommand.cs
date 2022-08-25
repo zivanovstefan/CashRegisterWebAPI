@@ -11,6 +11,7 @@ namespace CashRegister.Domain.Commands
     {
         public string BillNumber { get; set; }
         public int ProductId { get; set; }
-        public decimal ProductsPrice { get; set; }
+        public int ProductsPrice { get; set; }
+        public int ProductQuantity { get; set; }
     }
 }

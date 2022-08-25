@@ -16,6 +16,7 @@ namespace CashRegister.Infrastructure.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<ProductBill> BillProducts { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductBill>().HasKey(x => new {x.BillNumber, x.ProductId});

@@ -1,4 +1,7 @@
-﻿using CashRegister.Application.Interfaces;
+﻿using CashRegister.Application.ErrorModels;
+using CashRegister.Application.Interfaces;
+using CashRegister.Domain.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,18 +13,38 @@ namespace CashRegister.Application.Services
 {
     public class CurrencyExchangeService : ICurrencyExchangeService
     {
-        public ActionResult<int> Exchange(int amount, string currency)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<double> Exchange(double amount, string currency)
         {
-            int result = 0;
+            if (amount <= 0)
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.InvalidAmount,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
+            double result = 0;
             if (currency is "EUR")
             {
-                result = amount / 100;
+                result = amount / 117;
+                return Math.Round(result, 2);
             }
-            else if(currency is "USD")
+            else if (currency is "USD")
             {
-                result = amount / 50;
+                result = amount / 112;
+                return Math.Round(result, 2);
             }
-            return result;
+            else
+            {
+                var errorResponse = new ErrorResponseModel()
+                {
+                    ErrorMessage = Messages.CurrencyNotSupported,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+                return new BadRequestObjectResult(errorResponse);
+            }
         }
     }
 }

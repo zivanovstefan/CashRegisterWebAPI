@@ -8,11 +8,12 @@ namespace CashRegister.Domain.Commands
 {
     public class AddProductsCommand : ProductBillCommand
     {
-        public AddProductsCommand(string billNumber, int productId, decimal productsPrice)
+        public AddProductsCommand(string billNumber, int productId, int productsPrice, int productQuantity)
         {
             BillNumber = billNumber;
             ProductId = productId;
             ProductsPrice = productsPrice;
+            ProductQuantity = productQuantity;
         }
     }
 }

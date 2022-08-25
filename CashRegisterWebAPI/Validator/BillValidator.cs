@@ -8,10 +8,11 @@ namespace CashRegister.API.Validator
         public BillValidator()
         {
             RuleFor(b => b.BillNumber).Length(18);
-            RuleFor(b => b.BillNumber).Must(isBillNumberValid).WithMessage("Bill number is not valid");
+            RuleFor(b => b.BillNumber).Must(IsBillNumberValid).WithMessage("Bill number is not valid");
+            RuleFor(b => b.CreditCardNumber).Must(IsCreditCardNumberValid).WithMessage("Credit card number is not valid");
             RuleFor(b => b.TotalPrice).LessThanOrEqualTo(5000);
         }
-        private bool isBillNumberValid(string billNumber)
+        private bool IsBillNumberValid(string billNumber)
         {
             int controlNumber = Convert.ToInt32(billNumber.Substring(billNumber.Length - 2));
             string billSubstring = billNumber.Substring(0, 16);
@@ -22,7 +23,7 @@ namespace CashRegister.API.Validator
             }
             return false;
         }
-        private bool IsCredidCardNumberValid(string cardNumber)
+        private bool IsCreditCardNumberValid(string cardNumber)
         {
             bool isValid = true;
             if (cardNumber == null)

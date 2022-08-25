@@ -1,4 +1,5 @@
 ﻿using CashRegister.Application.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IBillService
     {
-        ICollection<BillVM> GetAllBills();
-        void Create(BillVM billVM);
-        void Update(BillVM billVM);
-        void Delete(string id);
-        BillVM GetBillByID(string id);
+        IEnumerable<BillVM> GetAllBills();
+        ActionResult<bool> Create(BillVM billVM);
+        ActionResult<bool> Update(BillVM billVM);
+        ActionResult<bool> Delete(string id);
+        ActionResult<BillVM> GetBillByID(string id);
     }
 }

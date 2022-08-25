@@ -1,4 +1,5 @@
 ﻿using CashRegister.Application.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace CashRegister.Application.Interfaces
 {
     public interface IProductBillService
     {
-        ICollection<ProductBillVM> GetAllBillProducts();
-        void AddProductToBill(ProductBillVM productBillVM);
-        void Delete(string id1, int id2);
+        ActionResult<List<ProductBillVM>> GetAllBillProducts();
+        ActionResult<bool> AddProductToBill(ProductBillVM productBillVM);
+        ActionResult<bool> DeleteProductsFromBill(string Bill_number, int Product_id, int quantity);
     }
 }

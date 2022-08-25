@@ -15,7 +15,7 @@ namespace CashRegister.Infrastructure.Migrations
                 {
                     BillNumber = table.Column<string>(type: "text", nullable: false),
                     PaymentMethod = table.Column<string>(type: "text", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalPrice = table.Column<int>(type: "numeric", nullable: false),
                     CreditCardNumber = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -30,7 +30,7 @@ namespace CashRegister.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                    Price = table.Column<int>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,7 +44,7 @@ namespace CashRegister.Infrastructure.Migrations
                     BillNumber = table.Column<string>(type: "text", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
                     ProductQuantity = table.Column<int>(type: "integer", nullable: false),
-                    ProductsPrice = table.Column<decimal>(type: "numeric", nullable: false)
+                    ProductsPrice = table.Column<int>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -16,13 +16,11 @@ namespace CashRegister.Infrastructure.Repositories
         {
             _context = context;
         }
-
         public void Add(ProductBill productBill)
         {
             _context.Add(productBill);
             _context.SaveChanges();
         }
-
         public void Delete(ProductBill productBill)
         {
             _context.Remove(productBill);
@@ -33,7 +31,6 @@ namespace CashRegister.Infrastructure.Repositories
             _context.Update(productBill);
             _context.SaveChanges();
         }
-
         public IEnumerable<ProductBill> GetProductBills()
         {
             return _context.BillProducts;
