@@ -72,7 +72,7 @@ namespace CashRegister.API.Controllers
         /// <param name="userModel"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<ActionResult> Post([FromBody] UserVM userModel)
         {
             if (!ModelState.IsValid)
@@ -119,7 +119,7 @@ namespace CashRegister.API.Controllers
             return Ok(token);
         }
 
-        [HttpPost("LogIn")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         public IActionResult LogIn([FromBody] UserCred userCred)
         {
