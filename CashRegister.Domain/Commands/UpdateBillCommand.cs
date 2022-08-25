@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace CashRegister.Domain.Commands
 {
-    public class UpdateBillCommand : BillCommand
+    public class UpdateBillCommand : UpdateCommand
     {
-        public UpdateBillCommand(string billNumber, string paymentMethod, int? totalPrice, string creditCardNumber)
+        public UpdateBillCommand(string billNumber, string paymentMethod, string creditCardNumber)
         {
             BillNumber = billNumber;
             PaymentMethod = paymentMethod;
-            TotalPrice = totalPrice;
             CreditCardNumber = creditCardNumber;
         }
     }
