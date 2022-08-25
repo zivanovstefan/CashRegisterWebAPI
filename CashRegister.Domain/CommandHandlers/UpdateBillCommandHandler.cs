@@ -21,7 +21,6 @@ namespace CashRegister.Domain.CommandHandlers
             var bill = _billRepository.GetAllBills().First(x => x.BillNumber == request.BillNumber);
             bill.BillNumber = request.BillNumber;
             bill.PaymentMethod = request.PaymentMethod;
-            bill.TotalPrice = request.TotalPrice;
             bill.CreditCardNumber = request.CreditCardNumber;
             _billRepository.Update(bill, bill.BillNumber);
             return Task.FromResult(true);

@@ -16,7 +16,7 @@ namespace CashRegister.Application.AutoMapper
             CreateMap<BillVM, CreateBillCommand>()
                 .ConstructUsing(c => new CreateBillCommand(c.BillNumber, c.PaymentMethod, c.TotalPrice, c.CreditCardNumber));
             CreateMap<BillVM, UpdateBillCommand>()
-                .ConstructUsing(c => new UpdateBillCommand(c.BillNumber, c.PaymentMethod, c.TotalPrice, c.CreditCardNumber));
+                .ConstructUsing(c => new UpdateBillCommand(c.BillNumber, c.PaymentMethod, c.CreditCardNumber));
         }
     }
 }

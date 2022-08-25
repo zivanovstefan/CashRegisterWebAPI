@@ -74,7 +74,7 @@ namespace CashRegister.API.Controllers
                 };
                 return BadRequest(errorResponse);
             }
-            return Ok(bill);
+            return Ok(bill.Value);
         }
     }
 }
