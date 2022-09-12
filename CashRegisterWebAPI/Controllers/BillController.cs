@@ -17,11 +17,6 @@ namespace CashRegister.API.Controllers
         {
             _billService = billService;
         }
-        [HttpGet("Bills")]
-        public IEnumerable<BillVM> GetBills()
-        {
-            return _billService.GetAllBills();
-        }
         [HttpGet("GetAllBills")]
         public IEnumerable<BillVM> GetAllBills()
         {

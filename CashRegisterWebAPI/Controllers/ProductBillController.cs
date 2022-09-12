@@ -13,11 +13,6 @@ namespace CashRegister.API.Controllers
         {
             _productBillService = productBillService;
         }
-        [HttpGet("Get all bill products")]
-        public ActionResult<List<ProductBillVM>> GetAllBillProducts()
-        {
-           return _productBillService.GetAllBillProducts();
-        }
         [HttpPost("AddProductToBill")]
         public ActionResult<bool> CreateBill([FromBody] ProductBillVM productBillVM) //ActionResult<bool>
         {
